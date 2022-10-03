@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
@@ -57,7 +56,6 @@ class FacebookAuthCubit extends Cubit<FacebookStates>
 
   @override
   Future<void> signUp() {
-    // TODO: implement signUp
     throw UnimplementedError();
   }
 

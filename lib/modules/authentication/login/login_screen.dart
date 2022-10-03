@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/email%20and%20password%20cubit/cubit.dart';
-import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 
 import '../../../shared/components/components.dart';
-import '../../../shared/components/constants.dart';
-import '../../../shared/components/constants.dart';
 import '../../../shared/components/constants.dart';
 import '../auth methods/auth cubit/states.dart';
 import '../register/register_screen.dart';
@@ -170,7 +167,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       buildMediaAcc(context),
                     ],
                   ),

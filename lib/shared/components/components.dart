@@ -5,8 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../layouts/social layout/social_layout.dart';
 import '../../modules/authentication/auth methods/auth cubit/cubit.dart';
 import '../../modules/authentication/auth methods/auth cubit/states.dart';
-import '../../modules/authentication/auth methods/phone cubit/cubit.dart';
-import '../../modules/authentication/auth methods/phone cubit/phone_states.dart';
 import '../../modules/authentication/opt/phone_screen.dart';
 import '../styles/colors.dart';
 

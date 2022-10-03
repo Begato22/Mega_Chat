@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -43,7 +45,6 @@ class GmailAuthCubit extends Cubit<GmailStates> implements Authentication {
 
   @override
   Future<void> signUp() {
-    // TODO: implement signUp
     throw UnimplementedError();
   }
 }

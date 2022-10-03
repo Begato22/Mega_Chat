@@ -1,8 +1,5 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -30,43 +27,41 @@ class PhoneScreen extends StatelessWidget {
             body: Form(
               key: formKey,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Phone Number',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
-                    SizedBox(height: 10),
-                    Text(
+                    const SizedBox(height: 10),
+                    const Text(
                       'Enter your phone number to verify your account',
                       style: TextStyle(fontSize: 14),
                     ),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     InternationalPhoneNumberInput(
                       onInputChanged: (PhoneNumber number) =>
                           cubit.onInputChanged(number),
-                      onInputValidated: (bool value) {
-                        print(value);
-                      },
-                      selectorConfig: SelectorConfig(
+                      onInputValidated: (bool value) {},
+                      selectorConfig: const SelectorConfig(
                         selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                       ),
                       ignoreBlank: false,
                       autoValidateMode: AutovalidateMode.disabled,
-                      selectorTextStyle: TextStyle(color: Colors.black),
+                      selectorTextStyle: const TextStyle(color: Colors.black),
                       initialValue: PhoneNumber(phoneNumber: '01000000000'),
                       textFieldController: phoneController,
                       formatInput: false,
-                      keyboardType: TextInputType.numberWithOptions(
+                      keyboardType: const TextInputType.numberWithOptions(
                           signed: true, decimal: true),
-                      inputBorder: OutlineInputBorder(),
+                      inputBorder: const OutlineInputBorder(),
                       maxLength: 10,
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     defultButton(
                         onPressed: () {
                           navigateAndRemoveTo(context, const OtpScreen());

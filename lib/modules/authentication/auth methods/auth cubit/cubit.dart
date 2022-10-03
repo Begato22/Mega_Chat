@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +9,6 @@ import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/sta
 
 import '../../../../models/user model/user_model.dart';
 import '../../../../shared/components/constants.dart';
-import '../facebook cubit/cubit.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(SignInInitialState());
@@ -90,7 +88,6 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   Future<void> signUpWithFacebook() {
-    // TODO: implement signUp
     throw UnimplementedError();
   }
 
@@ -128,7 +125,6 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   Future<void> signUpWithGmail() {
-    // TODO: implement signUp
     throw UnimplementedError();
   }
 }

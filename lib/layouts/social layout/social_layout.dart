@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
         var user = AuthCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text('Profile Page'),
+            title: const Text('Profile Page'),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 15),
@@ -100,29 +100,31 @@ class ProfileScreen extends StatelessWidget {
                           backgroundColor: defultColor,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         user.userModel.name!,
-                        style: TextStyle(fontSize: 30),
+                        style: const TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'JosefinSlab',
+                            fontWeight: FontWeight.bold),
                       ),
+                      const SizedBox(height: 10),
                       Text(user.userModel.email),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       defultButton(
                           onPressed: () {
                             if (user.userModel.loginMethod ==
                                 LoginMethod.facebook) {
                               user.signOutWithFacebook().then((value) {
-                                navigateAndRemoveTo(context, LoginScreen());
-                              }).catchError((onError) {
-                                print(onError.toString());
-                              });
+                                navigateAndRemoveTo(
+                                    context, const LoginScreen());
+                              }).catchError((onError) {});
                             } else if (user.userModel.loginMethod ==
                                 LoginMethod.google) {
                               user.signOutWithGmail().then((value) {
-                                navigateAndRemoveTo(context, LoginScreen());
-                              }).catchError((onError) {
-                                print(onError.toString());
-                              });
+                                navigateAndRemoveTo(
+                                    context, const LoginScreen());
+                              }).catchError((onError) {});
                             }
                           },
                           lable: 'logout')

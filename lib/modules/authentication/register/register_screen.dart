@@ -5,7 +5,6 @@ import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../auth methods/auth cubit/cubit.dart';
 import '../auth methods/auth cubit/states.dart';
-import '../auth methods/email and password cubit/email_password_states.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);

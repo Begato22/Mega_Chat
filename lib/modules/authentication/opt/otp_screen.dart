@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 import '../../../shared/styles/colors.dart';
@@ -17,12 +14,12 @@ class OtpScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.17),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   'Verification Code',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
@@ -35,7 +32,7 @@ class OtpScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           OtpTextField(
             autoFocus: true,
             numberOfFields: 5,
