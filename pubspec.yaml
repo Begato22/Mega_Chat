@@ -53,6 +53,7 @@ dependencies:
   country_picker: ^2.0.16
   intl_phone_number_input: ^0.7.1
   google_fonts: ^3.0.1
+  animated_bottom_navigation_bar: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +100,9 @@ flutter:
     - family: JosefinSlab
       fonts:
         - asset: assets/fonts/JosefinSlab_VariableFont_wght.ttf
+    - family: JuliusSansOne
+      fonts:
+        - asset: assets/fonts/JuliusSansOne-Regular.ttf
         # - asset: fonts/Schyler-Italic.ttf
           # style: italic
     # - family: Trajan Pro

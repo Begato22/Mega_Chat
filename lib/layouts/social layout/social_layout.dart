@@ -1,138 +1,69 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/models/user%20model/user_model.dart';
-import 'package:mega_chat/modules/authentication/login/login_screen.dart';
-import 'package:mega_chat/shared/components/components.dart';
+import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
+import 'package:mega_chat/layouts/social%20layout/social%20cubit/states.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/shared/styles/colors.dart';
+import 'package:mega_chat/shared/styles/icons_broken.dart';
 
-import '../../modules/authentication/auth methods/auth cubit/cubit.dart';
-import '../../modules/authentication/auth methods/auth cubit/states.dart';
-import '../../shared/components/constants.dart';
-import '../../shared/styles/colors.dart';
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class SocialLayout extends StatelessWidget {
+  const SocialLayout({super.key});
 
   @override
   Widget build(BuildContext context) {
-    makeStatusBarTransparent();
-    return BlocConsumer<AuthCubit, AuthStates>(
+    return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var user = AuthCubit.get(context);
+        var socialCubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Profile Page'),
+            title: const Text('MegaChat'),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: Image.network(
-                        user.userModel.imgUrl!,
-                      ).image,
+                    BlocConsumer<AuthCubit, AuthStates>(
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        var user = AuthCubit.get(context);
+                        return CircleAvatar(
+                          backgroundImage: Image.network(
+                            user.userModel.imgUrl!,
+                          ).image,
+                        );
+                      },
                     )
                   ],
                 ),
               )
             ],
           ),
-          body:
-              // state == GetUserLoading
-              //     ? const Center(child: CircularProgressIndicator())
-              //     :
-              Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-            child: SizedBox(
-              width: double.infinity,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Container(
-                      //   padding: const EdgeInsets.only(left: 20.0),
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(20),
-                      //     color: Colors.amber.withOpacity(0.6),
-                      //   ),
-                      //   child: Row(
-                      //     children: [
-                      //       const Icon(Icons.info_outline),
-                      //       const SizedBox(width: 5),
-                      //       Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: const [
-                      //           Text('Please Verify your mail'),
-                      //           Text(
-                      //             ' cubit.userModel!.email',
-                      //             style: TextStyle(
-                      //                 color: Colors.grey, fontSize: 12),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //       const Spacer(),
-                      //       defultTextButton(
-                      //           onPressed: () {
-                      //             FirebaseAuth.instance.currentUser!
-                      //                 .sendEmailVerification()
-                      //                 .then((value) {
-                      //               showToast(
-                      //                   'verified mail sent Successfully',
-                      //                   ToastState.success);
-                      //             });
-                      //           },
-                      //           lable: 'send'),
-                      //     ],
-                      //   ),
-                      // )
-                      CircleAvatar(
-                        radius: 62,
-                        backgroundColor: defultColor,
-                        child: CircleAvatar(
-                          backgroundImage: Image.network(
-                            user.userModel.imgUrl!,
-                            fit: BoxFit.cover,
-                          ).image,
-                          radius: 60,
-                          backgroundColor: defultColor,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        user.userModel.name!,
-                        style: const TextStyle(
-                            fontSize: 30,
-                            fontFamily: 'JosefinSlab',
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(user.userModel.email),
-                      const SizedBox(height: 20),
-                      defultButton(
-                          onPressed: () {
-                            if (user.userModel.loginMethod ==
-                                LoginMethod.facebook) {
-                              user.signOutWithFacebook().then((value) {
-                                navigateAndRemoveTo(
-                                    context, const LoginScreen());
-                              }).catchError((onError) {});
-                            } else if (user.userModel.loginMethod ==
-                                LoginMethod.google) {
-                              user.signOutWithGmail().then((value) {
-                                navigateAndRemoveTo(
-                                    context, const LoginScreen());
-                              }).catchError((onError) {});
-                            }
-                          },
-                          lable: 'logout')
-                    ],
-                  ),
-                ),
-              ),
+          body: Container(
+            child: socialCubit.screens[socialCubit.currentIndex],
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(
+              IconBroken.Profile,
+              size: 30,
             ),
+            onPressed: () {
+              socialCubit.changeNavigationBarScreen(4);
+            },
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: AnimatedBottomNavigationBar(
+            icons: socialCubit.iconList,
+            activeIndex: socialCubit.currentIndex,
+            gapLocation: GapLocation.center,
+            notchSmoothness: NotchSmoothness.verySmoothEdge,
+            onTap: (index) {
+              socialCubit.changeNavigationBarScreen(index);
+            },
+            activeColor: defaultColor,
           ),
         );
       },

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mega_chat/layouts/social%20layout/social_layout.dart';
 
-import '../../layouts/social layout/social_layout.dart';
 import '../../modules/authentication/auth methods/auth cubit/cubit.dart';
 import '../../modules/authentication/auth methods/auth cubit/states.dart';
 import '../../modules/authentication/opt/phone_screen.dart';
@@ -38,7 +38,7 @@ Widget defultButton({
   required Function onPressed,
   required String lable,
   bool isDisabled = false,
-  Color color = defultColor,
+  Color color = defaultColor,
 }) =>
     SizedBox(
       width: double.infinity,
@@ -46,7 +46,7 @@ Widget defultButton({
       child: ElevatedButton(
         onPressed: () => isDisabled ? null : onPressed(),
         style: ElevatedButton.styleFrom(
-          backgroundColor: isDisabled ? Colors.grey : defultColor,
+          backgroundColor: isDisabled ? Colors.grey : defaultColor,
         ),
         child: Text(
           lable.toUpperCase(),
@@ -68,7 +68,7 @@ void navigateAndRemoveTo(context, Widget screen) =>
 Widget defultTextButton({
   required Function onPressed,
   required String lable,
-  Color lableColor = defultColor,
+  Color lableColor = defaultColor,
 }) =>
     TextButton(
       onPressed: () => onPressed(),
@@ -134,7 +134,7 @@ Widget buildCircluerIconButton({
       },
       icon: Icon(
         iconData,
-        color: defultColor,
+        color: defaultColor,
       ),
     ),
   );
@@ -152,7 +152,7 @@ Widget buildMediaAcc(BuildContext context) {
             onPressed: () {
               AuthCubit.get(context).signInWithFacebook(context).then(
                 (value) {
-                  navigateAndRemoveTo(context, const ProfileScreen());
+                  navigateAndRemoveTo(context, const SocialLayout());
                 },
               );
             },
@@ -163,7 +163,7 @@ Widget buildMediaAcc(BuildContext context) {
             onPressed: () async {
               await AuthCubit.get(context).signInWithGmail(context).then(
                 (value) {
-                  navigateAndRemoveTo(context, const ProfileScreen());
+                  navigateAndRemoveTo(context, const SocialLayout());
                 },
               );
             },

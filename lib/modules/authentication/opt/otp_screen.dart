@@ -36,7 +36,7 @@ class OtpScreen extends StatelessWidget {
           OtpTextField(
             autoFocus: true,
             numberOfFields: 5,
-            borderColor: defultColor,
+            borderColor: defaultColor,
             //set to true to show as box or false to show as dash
             showFieldAsBox: true,
             //runs when a code is typed in
