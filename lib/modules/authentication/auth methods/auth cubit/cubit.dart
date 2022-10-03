@@ -59,6 +59,7 @@ class AuthCubit extends Cubit<AuthStates> {
     final userData = await facebookloginInstance.getUserData();
     print(userData.toString());
     userModel = UserModel.fromFacebookJson(userData);
+    userModel.loginMethod = LoginMethod.facebook;
     // context.read().bloc<UserCubit>().userModel = userModel;
     print('from model ${userModel.imgUrl}');
     emit(SignInSuccessState());
@@ -101,6 +102,7 @@ class AuthCubit extends Cubit<AuthStates> {
       (value) {
         print("all user data ${value.toString()}");
         userModel = UserModel.fromGoogleJson(value);
+        userModel.loginMethod = LoginMethod.google;
         // ********* hint check uId of facebook user *********
         emit(SignInSuccessState());
       },

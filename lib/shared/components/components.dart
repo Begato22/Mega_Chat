@@ -149,23 +149,23 @@ Widget buildMediaAcc(BuildContext context) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(width: 5),
           buildCircluerIconButton(
             iconData: Icons.facebook,
             onPressed: () {
               AuthCubit.get(context).signInWithFacebook(context).then(
                 (value) {
-                  navigateAndRemoveTo(context, const SocialLayout());
+                  navigateAndRemoveTo(context, const ProfileScreen());
                 },
               );
             },
           ),
+          const SizedBox(width: 5),
           buildCircluerIconButton(
             iconData: Icons.mail,
             onPressed: () async {
               await AuthCubit.get(context).signInWithGmail(context).then(
                 (value) {
-                  navigateAndRemoveTo(context, const SocialLayout());
+                  navigateAndRemoveTo(context, const ProfileScreen());
                 },
               );
             },
