@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "861584674377",
+    "project_id": "mega-chat-364410",
+    "storage_bucket": "mega-chat-364410.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861584674377:android:5129225d9c8e50358cb998",
+        "android_client_info": {
+          "package_name": "com.example.mega_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861584674377-r4n9k7q5uilnmeigm8qrkve5vpbpupud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mega_chat",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "861584674377-k4hahjhkbuqoeeluo1k0pbkjm2q8itks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTaDDBCuUg9jX1M7qGfK42olcWMs7ksZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861584674377-k4hahjhkbuqoeeluo1k0pbkjm2q8itks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

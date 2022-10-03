@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">mega chat</string>
+    <string name="facebook_app_id">823599615485713</string>
+    <string name="fb_login_protocol_scheme">fb823599615485713</string>
+    <string name="facebook_client_token">3573ebd043aa9c68702eefeed57f394f</string>
+
+</resources>
