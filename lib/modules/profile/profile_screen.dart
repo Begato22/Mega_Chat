@@ -106,6 +106,11 @@ class ProfileScreen extends StatelessWidget {
                             user.signOutWithGmail().then((value) {
                               navigateAndRemoveTo(context, const LoginScreen());
                             }).catchError((onError) {});
+                          } else if (user.userModel.loginMethod ==
+                              LoginMethod.normal) {
+                            user.signOutWithEmailAndPassword().then((value) {
+                              navigateAndRemoveTo(context, const LoginScreen());
+                            }).catchError((onError) {});
                           }
                         },
                         lable: 'logout',

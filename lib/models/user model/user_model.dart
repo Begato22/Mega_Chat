@@ -4,7 +4,9 @@ class UserModel {
   late String uId;
   late String? name;
   late String email;
-  late String? imgUrl;
+  String? imgUrl;
+  String? cover;
+  String? phone;
   bool isEmailVerified = false;
   LoginMethod loginMethod = LoginMethod.normal;
 
@@ -13,7 +15,17 @@ class UserModel {
     this.name,
     this.email,
     this.imgUrl,
+    this.cover,
+    this.phone,
   );
+  UserModel.fromJson(Map<String, dynamic>? json) {
+    uId = json!['uid'];
+    name = json['name'];
+    email = json['email'];
+    imgUrl = json['imageUrl'];
+    cover = json['cover'];
+    phone = json['phone'];
+  }
   UserModel.fromFacebookJson(Map<String, dynamic>? json) {
     uId = json!['id'];
     name = json['name'];

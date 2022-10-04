@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mega_chat/layouts/social%20layout/social_layout.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/email%20and%20password%20cubit/cubit.dart';
 
@@ -22,6 +23,9 @@ class LoginScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is SignInErrorState) {
           showToast(state.error, ToastState.error);
+        }
+        if (state is GetUserSuccessState) {
+          navigateAndRemoveTo(context, const SocialLayout());
         }
         // if (state is SignInSuccessState) {
         //   print('any thing');
@@ -139,9 +143,7 @@ class LoginScreen extends StatelessWidget {
                               onPressed: () {
                                 print("object");
                                 if (formKey.currentState!.validate()) {
-                                  print(
-                                      "Dear  look here !  ${emailController.text}  and ${passwordController.text}");
-                                  EmailPasswordAuthCubit.get(context).signIn(
+                                  cubit.signInWithEmailAndPassword(
                                     email: emailController.text,
                                     password: passwordController.text,
                                   );

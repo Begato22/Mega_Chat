@@ -35,4 +35,16 @@ class SignUpErrorState extends AuthStates {
   SignUpErrorState(this.error);
 }
 
+class CreateUserLodingState extends AuthStates {}
+
+class CreateUserSuccessState extends AuthStates {}
+
+class CreateUserErrorState extends AuthStates {
+  final String error;
+
+  CreateUserErrorState(this.error);
+}
+
+class GetUserSuccessState extends AuthStates {}
+
 class SignInChangeVisabilityState extends AuthStates {}
