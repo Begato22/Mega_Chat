@@ -19,23 +19,44 @@ class SocialLayout extends StatelessWidget {
         var socialCubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: const Text('MegaChat'),
+            title: BlocConsumer<AuthCubit, AuthStates>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                var user = AuthCubit.get(context);
+                return Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: Image.network(
+                        user.userModel.imgUrl!,
+                      ).image,
+                      radius: 15,
+                    ),
+                    const SizedBox(width: 5),
+                    const Text('MegaChat'),
+                  ],
+                );
+              },
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Row(
-                  children: [
-                    BlocConsumer<AuthCubit, AuthStates>(
-                      listener: (context, state) {},
-                      builder: (context, state) {
-                        var user = AuthCubit.get(context);
-                        return CircleAvatar(
-                          backgroundImage: Image.network(
-                            user.userModel.imgUrl!,
-                          ).image,
-                        );
-                      },
-                    )
+                  children: const [
+                    CircleAvatar(
+                      radius: 15,
+                      child: Icon(
+                        IconBroken.Search,
+                        size: 18,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    CircleAvatar(
+                      radius: 15,
+                      child: Icon(
+                        IconBroken.Notification,
+                        size: 18,
+                      ),
+                    ),
                   ],
                 ),
               )
