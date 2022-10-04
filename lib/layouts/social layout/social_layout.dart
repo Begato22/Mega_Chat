@@ -5,6 +5,8 @@ import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
 import 'package:mega_chat/layouts/social%20layout/social%20cubit/states.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/modules/new%20post/new_post_screen.dart';
+import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/styles/colors.dart';
 import 'package:mega_chat/shared/styles/icons_broken.dart';
 
@@ -25,11 +27,16 @@ class SocialLayout extends StatelessWidget {
                 var user = AuthCubit.get(context);
                 return Row(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: Image.network(
-                        user.userModel.imgUrl!,
-                      ).image,
-                      radius: 15,
+                    InkWell(
+                      child: CircleAvatar(
+                        backgroundImage: Image.network(
+                          user.userModel.imgUrl!,
+                        ).image,
+                        radius: 15,
+                      ),
+                      onTap: (() {
+                        socialCubit.changeNavigationBarScreen(4);
+                      }),
                     ),
                     const SizedBox(width: 5),
                     const Text('MegaChat'),
@@ -67,11 +74,11 @@ class SocialLayout extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(
-              IconBroken.Profile,
+              Icons.post_add_outlined,
               size: 30,
             ),
             onPressed: () {
-              socialCubit.changeNavigationBarScreen(4);
+              navigateTo(context, NewPostScreen());
             },
           ),
           floatingActionButtonLocation:
