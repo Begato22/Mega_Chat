@@ -53,12 +53,12 @@ class AuthCubit extends Cubit<AuthStates> {
   final facebookloginInstance = FacebookAuth.instance;
   Future<void> signInWithFacebook(context) async {
     emit(SignInLodingState());
+
     final facebookloginResult = await facebookloginInstance.login();
     final userData = await facebookloginInstance.getUserData();
     print(userData.toString());
     userModel = UserModel.fromFacebookJson(userData);
     userModel.loginMethod = LoginMethod.facebook;
-    // context.read().bloc<UserCubit>().userModel = userModel;
     print('from model ${userModel.imgUrl}');
     emit(SignInSuccessState());
     // final facebookAuthCredential =
