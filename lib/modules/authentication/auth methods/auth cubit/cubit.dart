@@ -31,15 +31,15 @@ class AuthCubit extends Cubit<AuthStates> {
 
   late UserModel userModel;
 
-  void createUser({
+  Future<void> createUser({
     required String name,
     required String email,
     required String uid,
     String? cover,
     String? imageUrl,
     String? phone,
-  }) {
-    FirebaseFirestore.instance.collection('users').doc(uid).set({
+  }) async {
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'name': name,
       'email': email,
       'uid': uid,
@@ -151,23 +151,27 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(SignInLodingState());
 
     final facebookloginResult = await facebookloginInstance.login();
-    final userData = await facebookloginInstance.getUserData();
-    print(userData.toString());
-    userModel = UserModel.fromFacebookJson(userData);
-    userModel.loginMethod = LoginMethod.facebook;
-    print('from model ${userModel.imgUrl}');
-    emit(SignInSuccessState());
-    // final facebookAuthCredential =
-    //     FacebookAuthProvider.credential(facebookloginResult.accessToken!.token);
-    // await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    // await FirebaseFirestore.instance.collection('users').add(
-    //   {
-    //     'email': userData['email'],
-    //     'imageUrl': userData['picture']['data']['url'],
-    //     'name': userData['name'],
-    //   },
-    // );
-    // ********* hint check uId of facebook user *********
+    facebookloginInstance.getUserData().then((value) async {
+      await createUser(
+        name: value['name'],
+        email: value['email'],
+        uid: value['id'],
+        imageUrl: value['picture']['data']['url'],
+      );
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(value['id'])
+          .get()
+          .then(
+        (value) {
+          userModel = UserModel.fromJson(value.data());
+          emit(GetUserSuccessState());
+        },
+      );
+      emit(SignInSuccessState());
+    });
+    final facebookAuthCredential =
+        FacebookAuthProvider.credential(facebookloginResult.accessToken!.token);
   }
 
   Future<void> signOutWithFacebook() async {

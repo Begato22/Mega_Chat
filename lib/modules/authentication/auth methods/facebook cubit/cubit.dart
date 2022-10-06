@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import '../../../../models/user model/user_model.dart';
-import '../../auth_interface.dart';
+import '../auth_interface.dart';
 import 'facebook_states.dart';
 
 class FacebookAuthCubit extends Cubit<FacebookStates>

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../shared/components/constants.dart';
-import '../../auth_interface.dart';
+import '../auth_interface.dart';
 import 'gmail_states.dart';
 
 class GmailAuthCubit extends Cubit<GmailStates> implements Authentication {

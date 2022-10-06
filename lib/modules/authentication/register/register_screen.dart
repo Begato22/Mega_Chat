@@ -21,7 +21,6 @@ class RegisterScreen extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthStates>(
       listener: (context, state) {
         if (state is CreateUserSuccessState) {
-          print('donnnnnn');
           navigateAndRemoveTo(context, SocialLayout());
         }
       },
