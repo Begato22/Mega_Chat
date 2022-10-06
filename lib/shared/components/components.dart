@@ -150,11 +150,7 @@ Widget buildMediaAcc(BuildContext context) {
           buildCircluerIconButton(
             iconData: Icons.facebook,
             onPressed: () {
-              AuthCubit.get(context).signInWithFacebook(context).then(
-                (value) {
-                  navigateAndRemoveTo(context, const SocialLayout());
-                },
-              );
+              AuthCubit.get(context).signInWithFacebook(context);
             },
           ),
           const SizedBox(width: 5),

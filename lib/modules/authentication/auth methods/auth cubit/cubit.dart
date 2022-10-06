@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 
 import '../../../../models/user model/user_model.dart';
@@ -44,7 +45,7 @@ class AuthCubit extends Cubit<AuthStates> {
       'email': email,
       'uid': uid,
       'cover': cover ??
-          'https://img.freepik.com/free-vector/image-upload-concept-illustration_114360-798.jpg?w=740&t=st=1664890098~exp=1664890698~hmac=aeced39226ff2008d5f7219bff5cd856a5abdab39443aa50405a3cdac60db7ac',
+          'https://timelinecovers.pro/facebook-cover/download/oh-wow-sarcastic-facebook-cover.jpg',
       'imageUrl': imageUrl ??
           'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1664890049~exp=1664890649~hmac=d0051e6c4e9f238987ba4326c6e13483b0126edd42b2df72dc6279219fbf8794',
       'phone': phone ?? '01 **** ** ***',
@@ -197,10 +198,17 @@ class AuthCubit extends Cubit<AuthStates> {
     print('before');
     await googleSignIn.signIn().then(
       (value) {
-        print("all user data ${value.toString()}");
-        userModel = UserModel.fromGoogleJson(value);
-        userModel.loginMethod = LoginMethod.google;
-        // ********* hint check uId of facebook user *********
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(value!.id)
+            .get()
+            .then(
+          (value) {
+            userModel = UserModel.fromJson(value.data());
+            userModel.loginMethod = LoginMethod.google;
+            emit(GetUserSuccessState());
+          },
+        );
         emit(SignInSuccessState());
       },
     ).catchError(
@@ -226,5 +234,9 @@ class AuthCubit extends Cubit<AuthStates> {
 
   Future<void> signUpWithGmail() {
     throw UnimplementedError();
+  }
+
+   Future pickImage() async {
+    await ImagePicker().pickImage(source: ImageSource.gallery);
   }
 }
