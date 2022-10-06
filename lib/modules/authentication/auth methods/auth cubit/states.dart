@@ -46,5 +46,6 @@ class CreateUserErrorState extends AuthStates {
 }
 
 class GetUserSuccessState extends AuthStates {}
+class GetUserErrorState extends AuthStates {}
 
 class SignInChangeVisabilityState extends AuthStates {}

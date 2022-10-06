@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mega_chat/layouts/social%20layout/social_layout.dart';
 
 import '../../modules/authentication/auth methods/auth cubit/cubit.dart';
 import '../../modules/authentication/auth methods/auth cubit/states.dart';
@@ -140,7 +139,7 @@ Widget buildCircluerIconButton({
   );
 }
 
-Widget buildMediaAcc(BuildContext context) {
+Widget buildMediaSigninAcc(BuildContext context) {
   return BlocConsumer<AuthCubit, AuthStates>(
     listener: (context, state) {},
     builder: (context, state) {
@@ -157,11 +156,45 @@ Widget buildMediaAcc(BuildContext context) {
           buildCircluerIconButton(
             iconData: Icons.mail,
             onPressed: () async {
-              await AuthCubit.get(context).signInWithGmail(context).then(
-                (value) {
-                  navigateAndRemoveTo(context, const SocialLayout());
+              await AuthCubit.get(context).signInWithGmail(context);
+            },
+          ),
+          const SizedBox(width: 5),
+          BlocConsumer<AuthCubit, AuthStates>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return buildCircluerIconButton(
+                iconData: Icons.phone,
+                onPressed: () {
+                  navigateTo(context, PhoneScreen());
                 },
               );
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget buildMediaSignUpAcc(BuildContext context) {
+  return BlocConsumer<AuthCubit, AuthStates>(
+    listener: (context, state) {},
+    builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          buildCircluerIconButton(
+            iconData: Icons.facebook,
+            onPressed: () {
+              AuthCubit.get(context).signUpWithFacebook();
+            },
+          ),
+          const SizedBox(width: 5),
+          buildCircluerIconButton(
+            iconData: Icons.mail,
+            onPressed: () async {
+              await AuthCubit.get(context).signUpWithGmail();
             },
           ),
           const SizedBox(width: 5),

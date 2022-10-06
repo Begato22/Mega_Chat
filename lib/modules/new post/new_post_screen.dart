@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewPostScreen extends StatelessWidget {
@@ -8,7 +7,7 @@ class NewPostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Post'),
+        title: const Text('New Post'),
       ),
       body: const Center(
         child: Text('NewPost'),

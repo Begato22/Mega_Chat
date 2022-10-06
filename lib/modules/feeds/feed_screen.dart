@@ -9,21 +9,15 @@ class FeedsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        var user = AuthCubit.get(context);
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              buildPost(context),
-              buildPost(context),
-              buildPost(context),
-            ],
-          ),
-        );
-      },
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          buildPost(context),
+          buildPost(context),
+          buildPost(context),
+        ],
+      ),
     );
   }
 
@@ -120,7 +114,7 @@ class FeedsScreen extends StatelessWidget {
                         ).image,
                         radius: 15,
                       ),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       InkWell(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -131,7 +125,7 @@ class FeedsScreen extends StatelessWidget {
                         ),
                         onTap: () {},
                       ),
-                      Spacer(),
+                      const Spacer(),
                       buildTypeUserReact(
                         context,
                         Colors.red,

@@ -46,7 +46,7 @@ class OtpScreen extends StatelessWidget {
             //runs when every textfield is filled
             onSubmit: (String verificationCode) {
               //to auto close keyboard.
-              FocusScopeNode currentFocus = FocusScope.of(context);
+              FocusScope.of(context);
               // showDialog(
               //   context: context,
               //   builder: (context) {

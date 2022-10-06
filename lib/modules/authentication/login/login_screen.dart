@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/layouts/social%20layout/social_layout.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/email%20and%20password%20cubit/cubit.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 
 import '../../../shared/components/components.dart';
@@ -25,7 +23,7 @@ class LoginScreen extends StatelessWidget {
         if (state is SignInErrorState) {
           showToast(state.error, ToastState.error);
         }
-        
+
         if (state is SignInLodingState) {
           navigateAndRemoveTo(context, const LoaderScreen());
         }
@@ -172,7 +170,7 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 15),
-                      buildMediaAcc(context),
+                      buildMediaSigninAcc(context),
                     ],
                   ),
                 ),

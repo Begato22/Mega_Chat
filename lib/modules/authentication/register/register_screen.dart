@@ -1,7 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
-import 'package:mega_chat/layouts/social%20layout/social_layout.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 
 import '../../../shared/components/components.dart';
@@ -22,8 +22,9 @@ class RegisterScreen extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthStates>(
       listener: (context, state) {
         if (state is SignUpLodingState) {
-          navigateAndRemoveTo(context, LoaderScreen());
+          navigateAndRemoveTo(context, const LoaderScreen());
         }
+        
       },
       builder: (context, state) {
         makeStatusBarTransparent();
@@ -138,7 +139,7 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       customDividorText('Register with'),
                       const SizedBox(height: 20),
-                      buildMediaAcc(context),
+                      buildMediaSignUpAcc(context),
                     ],
                   ),
                 ),

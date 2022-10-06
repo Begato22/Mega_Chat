@@ -151,7 +151,6 @@ class AuthCubit extends Cubit<AuthStates> {
   Future<void> signInWithFacebook(context) async {
     emit(SignInLodingState());
 
-    final facebookloginResult = await facebookloginInstance.login();
     facebookloginInstance.getUserData().then((value) async {
       await createUser(
         name: value['name'],
@@ -171,8 +170,6 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       emit(SignInSuccessState());
     });
-    final facebookAuthCredential =
-        FacebookAuthProvider.credential(facebookloginResult.accessToken!.token);
   }
 
   Future<void> signOutWithFacebook() async {
@@ -195,10 +192,17 @@ class AuthCubit extends Cubit<AuthStates> {
   var googleSignIn = GoogleSignIn();
   Future<void> signInWithGmail(context) async {
     emit(SignInLodingState());
-    print('before');
     await googleSignIn.signIn().then(
-      (value) {
-        FirebaseFirestore.instance
+      (value) async {
+        // await createUser(
+        //   name: value!.displayName!,
+        //   email: value.email,
+        //   uid: value.id,
+        //   imageUrl: value.photoUrl,
+        // );
+        print('1');
+
+        await FirebaseFirestore.instance
             .collection('users')
             .doc(value!.id)
             .get()
@@ -206,9 +210,14 @@ class AuthCubit extends Cubit<AuthStates> {
           (value) {
             userModel = UserModel.fromJson(value.data());
             userModel.loginMethod = LoginMethod.google;
+            print('2');
+            print(value.data());
+
+            print('3');
             emit(GetUserSuccessState());
           },
         );
+        print('4');
         emit(SignInSuccessState());
       },
     ).catchError(
@@ -232,11 +241,46 @@ class AuthCubit extends Cubit<AuthStates> {
     );
   }
 
-  Future<void> signUpWithGmail() {
-    throw UnimplementedError();
+  Future<void> signUpWithGmail() async {
+    emit(SignUpLodingState());
+    await googleSignIn.signIn().then(
+      (value) async {
+        await createUser(
+          name: value!.displayName!,
+          email: value.email,
+          uid: value.id,
+          imageUrl: value.photoUrl,
+        );
+        print('1');
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(value.id)
+            .get()
+            .then(
+          (value) {
+            userModel = UserModel.fromJson(value.data());
+            userModel.loginMethod = LoginMethod.google;
+            print('2');
+            print(value.data());
+            print('3');
+            emit(GetUserSuccessState());
+          },
+        ).catchError((onError) {
+          emit(GetUserErrorState());
+        });
+        print('4');
+        emit(SignUpSuccessState());
+      },
+    ).catchError(
+      (onError) {
+        print("errrrrr ${onError.toString()}");
+        emit(SignUpErrorState(onError.toString()));
+      },
+    );
   }
 
-   Future pickImage() async {
+  Future pickImage() async {
     await ImagePicker().pickImage(source: ImageSource.gallery);
   }
 }

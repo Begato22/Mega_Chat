@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mega_chat/models/user%20model/user_model.dart';
 import 'package:mega_chat/modules/authentication/login/login_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
@@ -30,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
               //     :
               Column(
             children: [
-              Container(
+              SizedBox(
                 height: size.height * 0.37,
                 child: Stack(
                   alignment: AlignmentDirectional.bottomCenter,
@@ -40,12 +39,12 @@ class ProfileScreen extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         height: 200,
+                        decoration: const BoxDecoration(
+                          color: defaultColor,
+                        ),
                         child: Image.network(
                           user.userModel.cover!,
                           fit: BoxFit.cover,
-                        ),
-                        decoration: BoxDecoration(
-                          color: defaultColor,
                         ),
                       ),
                     ),
@@ -70,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                             onTap: () async {
                               await user.pickImage();
                             },
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               radius: 15,
                               child: Icon(
                                 IconBroken.Camera,
@@ -102,11 +101,11 @@ class ProfileScreen extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         color: Colors.white,
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             buildUserDetailsItem(
                               IconBroken.Message,
                               user.userModel.email,
@@ -124,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       child: GestureDetector(
                         onTap: () {},
-                        child: Icon(
+                        child: const Icon(
                           IconBroken.Edit,
                           color: defaultColor,
                         ),
@@ -171,7 +170,7 @@ class ProfileScreen extends StatelessWidget {
           iconData,
           color: Colors.black38,
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         Text(data)
       ],
     );

@@ -28,15 +28,15 @@ class SocialLayout extends StatelessWidget {
                 return Row(
                   children: [
                     InkWell(
+                      onTap: (() {
+                        socialCubit.changeNavigationBarScreen(4);
+                      }),
                       child: CircleAvatar(
                         backgroundImage: Image.network(
                           user.userModel.imgUrl!,
                         ).image,
                         radius: 15,
                       ),
-                      onTap: (() {
-                        socialCubit.changeNavigationBarScreen(4);
-                      }),
                     ),
                     const SizedBox(width: 5),
                     const Text('MegaChat'),
@@ -78,7 +78,7 @@ class SocialLayout extends StatelessWidget {
               size: 30,
             ),
             onPressed: () {
-              navigateTo(context, NewPostScreen());
+              navigateTo(context, const NewPostScreen());
             },
           ),
           floatingActionButtonLocation:
