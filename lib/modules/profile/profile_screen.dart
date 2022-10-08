@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/models/user%20model/user_model.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/authentication/login/login_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/extensions.dart';
 import 'package:mega_chat/shared/styles/icons_broken.dart';
 
-import '../authentication/auth methods/auth cubit/cubit.dart';
-import '../authentication/auth methods/auth cubit/states.dart';
 import '../../shared/components/constants.dart';
 import '../../shared/styles/colors.dart';
 
