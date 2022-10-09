@@ -126,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                         prefix: Icons.lock_outline,
                         label: "Password",
                         keyboardType: TextInputType.visiblePassword,
-                        // obscureText: cubit.securePassword,
+                        obscureText: cubit.securassword,
                         suffix: cubit.visibleIcon,
                         suffixFunc: () => cubit.changeVisability(),
                         validator: (String val) {

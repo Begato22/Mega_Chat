@@ -27,10 +27,6 @@ class LoaderScreen extends StatelessWidget {
           navigateAndRemoveTo(context, const LoginScreen());
           showToast('You must sign up first', ToastState.error);
         }
-        if (state is SignUpErrorState) {
-          navigateAndRemoveTo(context, const LoginScreen());
-          showToast(state.error, ToastState.error);
-        }
       },
       builder: (context, state) {
         return Scaffold(

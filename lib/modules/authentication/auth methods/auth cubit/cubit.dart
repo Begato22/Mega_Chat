@@ -91,12 +91,11 @@ class AuthCubit extends Cubit<AuthStates> {
           userModel = UserModel.fromJson(value.data());
           userModel.loginMethod = LoginMethod.normal;
           print("done");
-          emit(GetUserSuccessState());
+          emit(SignInSuccessState());
         },
       ).catchError((onError) {
         print(onError.toString());
       });
-      emit(SignInSuccessState());
     }).catchError((onError) {
       print(onError.toString());
       emit(SignInErrorState(onError.toString()));
@@ -127,7 +126,8 @@ class AuthCubit extends Cubit<AuthStates> {
         .createUserWithEmailAndPassword(email: email, password: password)
         .then(
       (value) {
-        createUser(name: name, email: email, uid: value.user!.uid);
+        createUser(
+            name: name, email: email, uid: value.user!.uid, phone: phone);
         FirebaseFirestore.instance
             .collection('users')
             .doc(value.user!.uid)
@@ -147,17 +147,12 @@ class AuthCubit extends Cubit<AuthStates> {
     );
   }
 
-  final facebookloginInstance = FacebookAuth.instance;
+  final facebookAuthInstance = FacebookAuth.instance;
   Future<void> signInWithFacebook(context) async {
     emit(SignInLodingState());
 
-    facebookloginInstance.getUserData().then((value) async {
-      await createUser(
-        name: value['name'],
-        email: value['email'],
-        uid: value['id'],
-        imageUrl: value['picture']['data']['url'],
-      );
+    facebookAuthInstance.getUserData().then((value) async {
+      await facebookAuthInstance.login();
       FirebaseFirestore.instance
           .collection('users')
           .doc(value['id'])
@@ -165,16 +160,18 @@ class AuthCubit extends Cubit<AuthStates> {
           .then(
         (value) {
           userModel = UserModel.fromJson(value.data());
-          emit(GetUserSuccessState());
+          // emit(GetUserSuccessState());
+          emit(SignInSuccessState());
         },
-      );
-      emit(SignInSuccessState());
+      ).catchError((onError) {
+        emit(SignInErrorState(onError.toString()));
+      });
     });
   }
 
   Future<void> signOutWithFacebook() async {
     emit(SignOutLodingState());
-    facebookloginInstance.logOut().then(
+    facebookAuthInstance.logOut().then(
       (value) {
         emit(SignOutSuccessState());
       },
@@ -185,8 +182,19 @@ class AuthCubit extends Cubit<AuthStates> {
     );
   }
 
-  Future<void> signUpWithFacebook() {
-    throw UnimplementedError();
+  Future<void> signUpWithFacebook() async {
+    emit(SignUpLodingState());
+    facebookAuthInstance.getUserData().then((value) async {
+      await createUser(
+        name: value['name'],
+        email: value['email'],
+        uid: value['id'],
+        imageUrl: value['picture']['data']['url'],
+      );
+      emit(SignUpSuccessState());
+    }).catchError((onError) {
+      emit(SignUpErrorState(onError.toString()));
+    });
   }
 
   var googleSignIn = GoogleSignIn();
@@ -194,15 +202,7 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(SignInLodingState());
     await googleSignIn.signIn().then(
       (value) async {
-        // await createUser(
-        //   name: value!.displayName!,
-        //   email: value.email,
-        //   uid: value.id,
-        //   imageUrl: value.photoUrl,
-        // );
-        print('1');
-
-        await FirebaseFirestore.instance
+        FirebaseFirestore.instance
             .collection('users')
             .doc(value!.id)
             .get()
@@ -210,15 +210,11 @@ class AuthCubit extends Cubit<AuthStates> {
           (value) {
             userModel = UserModel.fromJson(value.data());
             userModel.loginMethod = LoginMethod.google;
-            print('2');
-            print(value.data());
-
-            print('3');
-            emit(GetUserSuccessState());
+            emit(SignInSuccessState());
           },
-        );
-        print('4');
-        emit(SignInSuccessState());
+        ).catchError((onError) {
+          emit(SignInErrorState(onError.toString()));
+        });
       },
     ).catchError(
       (onError) {
@@ -243,7 +239,7 @@ class AuthCubit extends Cubit<AuthStates> {
 
   Future<void> signUpWithGmail() async {
     emit(SignUpLodingState());
-    await googleSignIn.signIn().then(
+    googleSignIn.signIn().then(
       (value) async {
         await createUser(
           name: value!.displayName!,
@@ -251,25 +247,19 @@ class AuthCubit extends Cubit<AuthStates> {
           uid: value.id,
           imageUrl: value.photoUrl,
         );
-        print('1');
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(value.id)
-            .get()
-            .then(
-          (value) {
-            userModel = UserModel.fromJson(value.data());
-            userModel.loginMethod = LoginMethod.google;
-            print('2');
-            print(value.data());
-            print('3');
-            emit(GetUserSuccessState());
-          },
-        ).catchError((onError) {
-          emit(GetUserErrorState());
-        });
-        print('4');
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(value.id)
+        //     .get()
+        //     .then(
+        //   (value) {
+        //     userModel = UserModel.fromJson(value.data());
+        //     userModel.loginMethod = LoginMethod.google;
+        //     emit(GetUserSuccessState());
+        //   },
+        // ).catchError((onError) {
+        //   emit(GetUserErrorState());
+        // });
         emit(SignUpSuccessState());
       },
     ).catchError(
