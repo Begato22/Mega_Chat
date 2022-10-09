@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
-import '../auth methods/auth cubit/states.dart';
 import '../register/register_screen.dart';
 
 class LoginScreen extends StatelessWidget {

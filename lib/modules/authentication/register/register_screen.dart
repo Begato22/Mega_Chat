@@ -2,12 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
-import '../auth methods/auth cubit/cubit.dart';
-import '../auth methods/auth cubit/states.dart';
+
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class RegisterScreen extends StatelessWidget {
         if (state is SignUpLodingState) {
           navigateAndRemoveTo(context, const LoaderScreen());
         }
-        
+
       },
       builder: (context, state) {
         makeStatusBarTransparent();

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/phone%20cubit/cubit.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/phone%20cubit/phone_states.dart';
 
 import '../../../shared/components/components.dart';
-import '../auth methods/phone cubit/cubit.dart';
-import '../auth methods/phone cubit/phone_states.dart';
+
 import 'otp_screen.dart';
 
 class PhoneScreen extends StatelessWidget {
