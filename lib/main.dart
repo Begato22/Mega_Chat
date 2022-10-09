@@ -2,8 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
+import 'package:mega_chat/layouts/social%20layout/social_layout.dart';
 import 'package:mega_chat/layouts/social%20layout/user%20cubit/cubit.dart';
+import 'package:mega_chat/models/user%20model/user_model.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/shared/components/constants.dart';
 import 'package:mega_chat/shared/my_bloc_observer.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 import 'package:mega_chat/shared/styles/themes.dart';
@@ -16,14 +20,14 @@ Future<void> main() async {
   Bloc.observer = MyBlocObserver();
   await CashHelper.initi();
 
-  // uId = CashHelper.getData(key: 'uId');
-  // Widget widget;
-  // if (uId != null) {
-  //   // widget = const SocialLayout();
-  // } else {
-  //   widget = const LoginScreen();
-  // }
-  runApp(const MyApp(startWidget: LoginScreen()));
+  uId = CashHelper.getData(key: 'uId');
+  Widget widget;
+  if (uId != null) {
+    widget = const SocialLayout();
+  } else {
+    widget = const LoginScreen();
+  }
+  runApp(MyApp(startWidget: widget));
 }
 
 class MyApp extends StatelessWidget {
@@ -43,11 +47,23 @@ class MyApp extends StatelessWidget {
           create: (context) => SocialCubit(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: lightTheme,
-        home: const LoginScreen(),
+      child: BlocConsumer<AuthCubit, AuthStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var loginMthod = CashHelper.getData(key: 'loginMethod');
+          var cubit = AuthCubit.get(context);
+          if (loginMthod == LoginMethod.facebook) {
+            cubit.signInWithFacebook(context);
+          } else if (loginMthod == LoginMethod.google) {
+            cubit.signInWithGmail(context);
+          }
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: lightTheme,
+            home: startWidget,
+          );
+        },
       ),
     );
   }

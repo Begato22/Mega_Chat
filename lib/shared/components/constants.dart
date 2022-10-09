@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mega_chat/models/user%20model/user_model.dart';
 import 'package:mega_chat/shared/components/components.dart';
 
 import '../../modules/authentication/login/login_screen.dart';
@@ -27,5 +28,7 @@ void logOut(context) {
 }
 
 dynamic uId = '';
+
+LoginMethod loginMethod = LoginMethod.normal;
 
 String googleMapKey = "AIzaSyCvEXcvKlGVB-qv6LsQq6jlmWIhOHv4ZAg";

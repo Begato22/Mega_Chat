@@ -8,6 +8,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 
 import '../../../../models/user model/user_model.dart';
 import '../../../../shared/components/constants.dart';
@@ -82,6 +83,7 @@ class AuthCubit extends Cubit<AuthStates> {
         .then((value) async {
       print(value.user!.email);
       uId = value.user!.uid;
+      CashHelper.setData(key: 'uId', value: value.user!.uid);
       FirebaseFirestore.instance
           .collection('users')
           .doc(value.user!.uid)
@@ -106,6 +108,8 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(SignOutLodingState());
     FirebaseAuth.instance.signOut().then(
       (value) {
+        CashHelper.removeData(key: 'uId');
+        uId = '';
         emit(SignOutSuccessState());
       },
     ).catchError(
@@ -153,17 +157,22 @@ class AuthCubit extends Cubit<AuthStates> {
 
     facebookAuthInstance.getUserData().then((value) async {
       await facebookAuthInstance.login();
+      print('object 1');
       FirebaseFirestore.instance
           .collection('users')
           .doc(value['id'])
           .get()
           .then(
         (value) {
+          print('object 2');
           userModel = UserModel.fromJson(value.data());
-          // emit(GetUserSuccessState());
+          CashHelper.setData(key: 'uId', value: value['uid']);
+          CashHelper.setData(key: 'loginMethod', value: LoginMethod.facebook);
+          uId = value['uid'];
           emit(SignInSuccessState());
         },
       ).catchError((onError) {
+        print('object 3');
         emit(SignInErrorState(onError.toString()));
       });
     });
@@ -173,6 +182,8 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(SignOutLodingState());
     facebookAuthInstance.logOut().then(
       (value) {
+        CashHelper.removeData(key: 'uId');
+        uId = '';
         emit(SignOutSuccessState());
       },
     ).catchError(
@@ -210,6 +221,10 @@ class AuthCubit extends Cubit<AuthStates> {
           (value) {
             userModel = UserModel.fromJson(value.data());
             userModel.loginMethod = LoginMethod.google;
+            CashHelper.setData(key: 'uId', value: value['uid']);
+            CashHelper.setData(key: 'loginMethod', value: LoginMethod.google
+            );
+            uId = value['uid'];
             emit(SignInSuccessState());
           },
         ).catchError((onError) {
@@ -228,6 +243,8 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(SignOutLodingState());
     googleSignIn.signOut().then(
       (value) {
+        CashHelper.removeData(key: 'uId');
+        uId = '';
         emit(SignOutSuccessState());
       },
     ).catchError(
