@@ -6,6 +6,7 @@ import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/sta
 import 'package:mega_chat/modules/authentication/login/login_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/extensions.dart';
+import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 import 'package:mega_chat/shared/styles/icons_broken.dart';
 
 import '../../shared/components/constants.dart';
@@ -18,7 +19,13 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     makeStatusBarTransparent();
     return BlocConsumer<AuthCubit, AuthStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is SignOutSuccessState) {
+          CashHelper.removeData(key: 'id');
+          CashHelper.removeData(key: 'loginMethod');
+          uId = '';
+        }
+      },
       builder: (context, state) {
         var user = AuthCubit.get(context);
         var size = MediaQuery.of(context).size;

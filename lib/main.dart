@@ -7,6 +7,7 @@ import 'package:mega_chat/layouts/social%20layout/user%20cubit/cubit.dart';
 import 'package:mega_chat/models/user%20model/user_model.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/modules/loader/loader_screen.dart';
 import 'package:mega_chat/shared/components/constants.dart';
 import 'package:mega_chat/shared/my_bloc_observer.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
@@ -19,11 +20,12 @@ Future<void> main() async {
   await Firebase.initializeApp();
   Bloc.observer = MyBlocObserver();
   await CashHelper.initi();
-
-  uId = CashHelper.getData(key: 'uId');
+  print('kkkkk ${LoginMethod.google}');
+  uId = CashHelper.getData(key: 'id');
   Widget widget;
   if (uId != null) {
-    widget = const SocialLayout();
+    print("before loading");
+    widget = const LoaderScreen();
   } else {
     widget = const LoginScreen();
   }
@@ -50,12 +52,22 @@ class MyApp extends StatelessWidget {
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var loginMthod = CashHelper.getData(key: 'loginMethod');
+          var loginMethod = CashHelper.getData(key: 'loginMethod');
           var cubit = AuthCubit.get(context);
-          if (loginMthod == LoginMethod.facebook) {
-            cubit.signInWithFacebook(context);
-          } else if (loginMthod == LoginMethod.google) {
-            cubit.signInWithGmail(context);
+          print(
+              '@@ this login method in cash helper provided  before checking : ${CashHelper.getData(key: 'loginMethod')}');
+          print(
+              '@@ this uId in cash helper provided  before checking : ${CashHelper.getData(key: 'id')}');
+          if (loginMethod != null) {
+            print('loginMthod is not null.');
+            if (loginMethod == LoginMethod.facebook) {
+              print('@@ we will get data from facebook login');
+              cubit.signInWithFacebook(context);
+            } else if (loginMethod == '$loginMethod') {
+              cubit.getUser(uId, LoginMethod.google);
+              print(
+                  '@@ we will get data from google login ${cubit.userModel.loginMethod}');
+            }
           }
           return MaterialApp(
             debugShowCheckedModeBanner: false,

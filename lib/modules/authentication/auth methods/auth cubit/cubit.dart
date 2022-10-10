@@ -151,28 +151,42 @@ class AuthCubit extends Cubit<AuthStates> {
     );
   }
 
+  void getUser(String id, LoginMethod loginMethod) {
+    FirebaseFirestore.instance.collection('users').doc(id).get().then(
+      (value) {
+        emit(GetUserLoadingState());
+        userModel = UserModel.fromJson(value.data());
+        userModel.loginMethod = loginMethod;
+        CashHelper.setData(key: 'uId', value: value['uid']);
+        CashHelper.setData(key: 'loginMethod', value: '$loginMethod');
+        uId = value['uid'];
+        print('before emit');
+        emit(GetUserSuccessState());
+      },
+    ).catchError((onError) {
+      emit(GetUserErrorState());
+    });
+  }
+
   final facebookAuthInstance = FacebookAuth.instance;
   Future<void> signInWithFacebook(context) async {
     emit(SignInLodingState());
 
     facebookAuthInstance.getUserData().then((value) async {
       await facebookAuthInstance.login();
-      print('object 1');
       FirebaseFirestore.instance
           .collection('users')
           .doc(value['id'])
           .get()
           .then(
         (value) {
-          print('object 2');
           userModel = UserModel.fromJson(value.data());
           CashHelper.setData(key: 'uId', value: value['uid']);
-          CashHelper.setData(key: 'loginMethod', value: LoginMethod.facebook);
+          CashHelper.setData(key: 'loginMethod', value: 'facebook');
           uId = value['uid'];
           emit(SignInSuccessState());
         },
       ).catchError((onError) {
-        print('object 3');
         emit(SignInErrorState(onError.toString()));
       });
     });
@@ -221,9 +235,9 @@ class AuthCubit extends Cubit<AuthStates> {
           (value) {
             userModel = UserModel.fromJson(value.data());
             userModel.loginMethod = LoginMethod.google;
-            CashHelper.setData(key: 'uId', value: value['uid']);
-            CashHelper.setData(key: 'loginMethod', value: LoginMethod.google
-            );
+            CashHelper.setData(key: 'id', value: value['uid']);
+            CashHelper.setData(key: 'loginMethod', value: 'google');
+            print('aaaaaaaaaaaaaaa ${CashHelper.getData(key: 'loginMethod')}');
             uId = value['uid'];
             emit(SignInSuccessState());
           },
@@ -243,8 +257,7 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(SignOutLodingState());
     googleSignIn.signOut().then(
       (value) {
-        CashHelper.removeData(key: 'uId');
-        uId = '';
+        print('Done');
         emit(SignOutSuccessState());
       },
     ).catchError(
@@ -264,20 +277,19 @@ class AuthCubit extends Cubit<AuthStates> {
           uid: value.id,
           imageUrl: value.photoUrl,
         );
-        // await FirebaseFirestore.instance
-        //     .collection('users')
-        //     .doc(value.id)
-        //     .get()
-        //     .then(
-        //   (value) {
-        //     userModel = UserModel.fromJson(value.data());
-        //     userModel.loginMethod = LoginMethod.google;
-        //     emit(GetUserSuccessState());
-        //   },
-        // ).catchError((onError) {
-        //   emit(GetUserErrorState());
-        // });
-        emit(SignUpSuccessState());
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(value.id)
+            .get()
+            .then(
+          (value) {
+            userModel = UserModel.fromJson(value.data());
+            userModel.loginMethod = LoginMethod.google;
+            emit(SignUpSuccessState());
+          },
+        ).catchError((onError) {
+          emit(SignUpErrorState(onError.toString()));
+        });
       },
     ).catchError(
       (onError) {

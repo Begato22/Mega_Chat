@@ -29,6 +29,6 @@ void logOut(context) {
 
 dynamic uId = '';
 
-LoginMethod loginMethod = LoginMethod.normal;
+// LoginMethod loginMethod = LoginMethod.normal;
 
 String googleMapKey = "AIzaSyCvEXcvKlGVB-qv6LsQq6jlmWIhOHv4ZAg";

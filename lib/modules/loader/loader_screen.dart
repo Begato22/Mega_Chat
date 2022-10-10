@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mega_chat/layouts/social%20layout/user%20cubit/states.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/authentication/login/login_screen.dart';
@@ -26,6 +27,9 @@ class LoaderScreen extends StatelessWidget {
         if (state is SignInErrorState) {
           navigateAndRemoveTo(context, const LoginScreen());
           showToast('You must sign up first', ToastState.error);
+        }
+        if (state is GetUserSuccessState) {
+          navigateAndRemoveTo(context, const SocialLayout());
         }
       },
       builder: (context, state) {
