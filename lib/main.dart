@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mega_chat/layouts/onboarding%20layout/cubit/cubit.dart';
+import 'package:mega_chat/layouts/onboarding%20layout/on_boarding_layout.dart';
 import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
 import 'package:mega_chat/layouts/social%20layout/user%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
@@ -44,16 +46,18 @@ class MyApp extends StatelessWidget {
         BlocProvider<SocialCubit>(
           create: (context) => SocialCubit(),
         ),
+        BlocProvider<OnBoardingCubit>(
+          create: (context) => OnBoardingCubit(),
+        ),
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: lightTheme,
-            home: startWidget,
+            home: OnBoardingLayout(),
           );
         },
       ),
