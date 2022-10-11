@@ -14,7 +14,7 @@ import '../../../../models/user model/user_model.dart';
 import '../../../../shared/components/constants.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
-  AuthCubit() : super(SignInInitialState());
+  AuthCubit() : super(AuthInitialState());
 
   static AuthCubit get(context) => BlocProvider.of(context);
 
@@ -32,6 +32,10 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   late UserModel userModel;
+
+  void createFakeUser() {
+    userModel = UserModel('uId', 'name', 'email', 'imgUrl', 'cover', 'phone');
+  }
 
   Future<void> createUser({
     required String name,
@@ -61,16 +65,21 @@ class AuthCubit extends Cubit<AuthStates> {
     );
   }
 
-  Future<void> getUserFromFireStore(value) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(value.user!.uid)
-        .get()
-        .then(
+  void getUser(String id, LoginMethod loginMethod) {
+    FirebaseFirestore.instance.collection('users').doc(id).get().then(
       (value) {
+        emit(GetUserLoadingState());
         userModel = UserModel.fromJson(value.data());
+        userModel.loginMethod = loginMethod;
+        CashHelper.setData(key: 'id', value: value['uid']);
+        CashHelper.setData(key: 'loginMethod', value: '$loginMethod');
+        uId = value['uid'];
+        print('before emit');
+        emit(GetUserSuccessState());
       },
-    );
+    ).catchError((onError) {
+      emit(GetUserErrorState());
+    });
   }
 
   Future<void> signInWithEmailAndPassword({
@@ -81,42 +90,12 @@ class AuthCubit extends Cubit<AuthStates> {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) async {
-      print(value.user!.email);
-      uId = value.user!.uid;
-      CashHelper.setData(key: 'uId', value: value.user!.uid);
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(value.user!.uid)
-          .get()
-          .then(
-        (value) {
-          userModel = UserModel.fromJson(value.data());
-          userModel.loginMethod = LoginMethod.normal;
-          print("done");
-          emit(SignInSuccessState());
-        },
-      ).catchError((onError) {
-        print(onError.toString());
-      });
+      getUser(value.user!.uid, LoginMethod.normal);
+      emit(SignInSuccessState());
     }).catchError((onError) {
       print(onError.toString());
       emit(SignInErrorState(onError.toString()));
     });
-  }
-
-  Future<void> signOutWithEmailAndPassword() async {
-    emit(SignOutLodingState());
-    FirebaseAuth.instance.signOut().then(
-      (value) {
-        CashHelper.removeData(key: 'uId');
-        uId = '';
-        emit(SignOutSuccessState());
-      },
-    ).catchError(
-      (onError) {
-        emit(SignOutErrorState(onError.toString()));
-      },
-    );
   }
 
   Future<void> signUpWithEmailAndPassword({
@@ -132,16 +111,6 @@ class AuthCubit extends Cubit<AuthStates> {
       (value) {
         createUser(
             name: name, email: email, uid: value.user!.uid, phone: phone);
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(value.user!.uid)
-            .get()
-            .then(
-          (value) {
-            userModel = UserModel.fromJson(value.data());
-            userModel.loginMethod = LoginMethod.normal;
-          },
-        );
         emit(SignUpSuccessState());
       },
     ).catchError(
@@ -151,152 +120,102 @@ class AuthCubit extends Cubit<AuthStates> {
     );
   }
 
-  void getUser(String id, LoginMethod loginMethod) {
-    FirebaseFirestore.instance.collection('users').doc(id).get().then(
-      (value) {
-        emit(GetUserLoadingState());
-        userModel = UserModel.fromJson(value.data());
-        userModel.loginMethod = loginMethod;
-        CashHelper.setData(key: 'uId', value: value['uid']);
-        CashHelper.setData(key: 'loginMethod', value: '$loginMethod');
-        uId = value['uid'];
-        print('before emit');
-        emit(GetUserSuccessState());
-      },
-    ).catchError((onError) {
-      emit(GetUserErrorState());
-    });
-  }
-
   final facebookAuthInstance = FacebookAuth.instance;
-  Future<void> signInWithFacebook(context) async {
-    emit(SignInLodingState());
+  final googleSignIn = GoogleSignIn();
 
-    facebookAuthInstance.getUserData().then((value) async {
+  void signInWithSocialMediaAccount(LoginMethod loginMethod) async {
+    emit(SignInLodingState());
+    if (loginMethod == LoginMethod.facebook) {
       await facebookAuthInstance.login();
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(value['id'])
-          .get()
-          .then(
-        (value) {
-          userModel = UserModel.fromJson(value.data());
-          CashHelper.setData(key: 'uId', value: value['uid']);
-          CashHelper.setData(key: 'loginMethod', value: 'facebook');
-          uId = value['uid'];
-          emit(SignInSuccessState());
-        },
-      ).catchError((onError) {
+      facebookAuthInstance.getUserData().then((value) async {
+        getUser(value['id'], loginMethod);
+        // emit(SignInSuccessState());
+      }).catchError((onError) {
         emit(SignInErrorState(onError.toString()));
       });
-    });
-  }
-
-  Future<void> signOutWithFacebook() async {
-    emit(SignOutLodingState());
-    facebookAuthInstance.logOut().then(
-      (value) {
-        CashHelper.removeData(key: 'uId');
-        uId = '';
-        emit(SignOutSuccessState());
-      },
-    ).catchError(
-      (onError) {
-        emit(SignOutErrorState(onError.toString()));
-      },
-    );
-  }
-
-  Future<void> signUpWithFacebook() async {
-    emit(SignUpLodingState());
-    facebookAuthInstance.getUserData().then((value) async {
-      await createUser(
-        name: value['name'],
-        email: value['email'],
-        uid: value['id'],
-        imageUrl: value['picture']['data']['url'],
-      );
-      emit(SignUpSuccessState());
-    }).catchError((onError) {
-      emit(SignUpErrorState(onError.toString()));
-    });
-  }
-
-  var googleSignIn = GoogleSignIn();
-  Future<void> signInWithGmail(context) async {
-    emit(SignInLodingState());
-    await googleSignIn.signIn().then(
-      (value) async {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(value!.id)
-            .get()
-            .then(
-          (value) {
-            userModel = UserModel.fromJson(value.data());
-            userModel.loginMethod = LoginMethod.google;
-            CashHelper.setData(key: 'id', value: value['uid']);
-            CashHelper.setData(key: 'loginMethod', value: 'google');
-            print('aaaaaaaaaaaaaaa ${CashHelper.getData(key: 'loginMethod')}');
-            uId = value['uid'];
-            emit(SignInSuccessState());
-          },
-        ).catchError((onError) {
+    } else if (loginMethod == LoginMethod.google) {
+      await googleSignIn.signIn().then(
+        (value) async {
+          getUser(value!.id, loginMethod);
+          print("object");
+          // emit(SignInSuccessState());
+        },
+      ).catchError(
+        (onError) {
           emit(SignInErrorState(onError.toString()));
-        });
-      },
-    ).catchError(
-      (onError) {
-        print("errrrrr ${onError.toString()}");
-        emit(SignInErrorState(onError.toString()));
-      },
-    );
+        },
+      );
+    }
   }
 
-  Future<void> signOutWithGmail() async {
-    emit(SignOutLodingState());
-    googleSignIn.signOut().then(
-      (value) {
-        print('Done');
-        emit(SignOutSuccessState());
-      },
-    ).catchError(
-      (onError) {
-        emit(SignOutErrorState(onError.toString()));
-      },
-    );
-  }
-
-  Future<void> signUpWithGmail() async {
+  void signUpWithSocialMediaAccount(LoginMethod loginMethod) async {
     emit(SignUpLodingState());
-    googleSignIn.signIn().then(
-      (value) async {
-        await createUser(
-          name: value!.displayName!,
-          email: value.email,
-          uid: value.id,
-          imageUrl: value.photoUrl,
-        );
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(value.id)
-            .get()
-            .then(
-          (value) {
-            userModel = UserModel.fromJson(value.data());
-            userModel.loginMethod = LoginMethod.google;
-            emit(SignUpSuccessState());
-          },
-        ).catchError((onError) {
+    if (loginMethod == LoginMethod.facebook) {
+      facebookAuthInstance.login().then((value) {
+        facebookAuthInstance.getUserData().then((value) async {
+          await createUser(
+            name: value['name'],
+            email: value['email'],
+            uid: value['id'],
+            imageUrl: value['picture']['data']['url'],
+          );
+          emit(SignUpSuccessState());
+        }).catchError((onError) {
           emit(SignUpErrorState(onError.toString()));
         });
-      },
-    ).catchError(
-      (onError) {
-        print("errrrrr ${onError.toString()}");
-        emit(SignUpErrorState(onError.toString()));
-      },
-    );
+      });
+    } else if (loginMethod == LoginMethod.google) {
+      googleSignIn.signIn().then(
+        (value) async {
+          await createUser(
+            name: value!.displayName!,
+            email: value.email,
+            uid: value.id,
+            imageUrl: value.photoUrl,
+          );
+          emit(SignUpSuccessState());
+        },
+      ).catchError(
+        (onError) {
+          emit(SignUpErrorState(onError.toString()));
+        },
+      );
+    }
+  }
+
+  void signOut(LoginMethod loginMethod) {
+    emit(SignOutLodingState());
+    if (loginMethod == LoginMethod.normal) {
+      FirebaseAuth.instance.signOut().then(
+        (value) {
+          emit(SignOutSuccessState());
+        },
+      ).catchError(
+        (onError) {
+          emit(SignOutErrorState(onError.toString()));
+        },
+      );
+    } else if (loginMethod == LoginMethod.facebook) {
+      facebookAuthInstance.logOut().then(
+        (value) {
+          emit(SignOutSuccessState());
+        },
+      ).catchError(
+        (onError) {
+          emit(SignOutErrorState(onError.toString()));
+        },
+      );
+    } else if (loginMethod == LoginMethod.google) {
+      googleSignIn.signOut().then(
+        (value) {
+          emit(SignOutSuccessState());
+        },
+      ).catchError(
+        (onError) {
+          emit(SignOutErrorState(onError.toString()));
+        },
+      );
+    }
   }
 
   Future pickImage() async {

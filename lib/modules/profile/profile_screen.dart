@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/models/user%20model/user_model.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/authentication/login/login_screen.dart';
@@ -21,9 +20,10 @@ class ProfileScreen extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthStates>(
       listener: (context, state) {
         if (state is SignOutSuccessState) {
-          CashHelper.removeData(key: 'id');
+          CashHelper.removeData(key: 'uId');
           CashHelper.removeData(key: 'loginMethod');
           uId = '';
+          navigateAndRemoveTo(context, const LoginScreen());
         }
       },
       builder: (context, state) {
@@ -144,21 +144,7 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: defultButton(
                   onPressed: () {
-                    if (user.userModel.loginMethod == LoginMethod.facebook) {
-                      user.signOutWithFacebook().then((value) {
-                        navigateAndRemoveTo(context, const LoginScreen());
-                      }).catchError((onError) {});
-                    } else if (user.userModel.loginMethod ==
-                        LoginMethod.google) {
-                      user.signOutWithGmail().then((value) {
-                        navigateAndRemoveTo(context, const LoginScreen());
-                      }).catchError((onError) {});
-                    } else if (user.userModel.loginMethod ==
-                        LoginMethod.normal) {
-                      user.signOutWithEmailAndPassword().then((value) {
-                        navigateAndRemoveTo(context, const LoginScreen());
-                      }).catchError((onError) {});
-                    }
+                    user.signOut(user.userModel.loginMethod);
                   },
                   lable: 'logout',
                 ),

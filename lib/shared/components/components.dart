@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mega_chat/models/user%20model/user_model.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
-
 
 import '../../modules/authentication/opt/phone_screen.dart';
 import '../styles/colors.dart';
@@ -150,14 +150,16 @@ Widget buildMediaSigninAcc(BuildContext context) {
           buildCircluerIconButton(
             iconData: Icons.facebook,
             onPressed: () {
-              AuthCubit.get(context).signInWithFacebook(context);
+              AuthCubit.get(context)
+                  .signInWithSocialMediaAccount(LoginMethod.facebook);
             },
           ),
           const SizedBox(width: 5),
           buildCircluerIconButton(
             iconData: Icons.mail,
             onPressed: () async {
-              await AuthCubit.get(context).signInWithGmail(context);
+              AuthCubit.get(context)
+                  .signInWithSocialMediaAccount(LoginMethod.google);
             },
           ),
           const SizedBox(width: 5),
@@ -188,14 +190,16 @@ Widget buildMediaSignUpAcc(BuildContext context) {
           buildCircluerIconButton(
             iconData: Icons.facebook,
             onPressed: () {
-              AuthCubit.get(context).signUpWithFacebook();
+              AuthCubit.get(context)
+                  .signUpWithSocialMediaAccount(LoginMethod.facebook);
             },
           ),
           const SizedBox(width: 5),
           buildCircluerIconButton(
             iconData: Icons.mail,
             onPressed: () async {
-              await AuthCubit.get(context).signUpWithGmail();
+              AuthCubit.get(context)
+                  .signUpWithSocialMediaAccount(LoginMethod.google);
             },
           ),
           const SizedBox(width: 5),

@@ -1,6 +1,6 @@
 abstract class AuthStates {}
 
-class SignInInitialState extends AuthStates {}
+class AuthInitialState extends AuthStates {}
 
 class SignInLodingState extends AuthStates {}
 
