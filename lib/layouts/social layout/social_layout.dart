@@ -22,7 +22,11 @@ class SocialLayout extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: BlocConsumer<AuthCubit, AuthStates>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state is SignOutSuccessState) {
+                  socialCubit.currentIndex = 0;
+                }
+              },
               builder: (context, state) {
                 var user = AuthCubit.get(context);
                 return Row(
