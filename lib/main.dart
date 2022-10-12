@@ -21,11 +21,17 @@ Future<void> main() async {
   Bloc.observer = MyBlocObserver();
   await CashHelper.initi();
   uId = CashHelper.getData(key: 'id');
+  var onBoarding = CashHelper.getData(key: 'onBoarding');
+  print('onBoarding ${onBoarding}');
   Widget widget;
   if (uId != null) {
     widget = const LoaderScreen();
   } else {
-    widget = const LoginScreen();
+    if (onBoarding == null) {
+      widget = const OnBoardingLayout();
+    } else {
+      widget = const LoginScreen();
+    }
   }
   runApp(MyApp(startWidget: widget));
 }
@@ -57,7 +63,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: lightTheme,
-            home: OnBoardingLayout(),
+            home: startWidget,
           );
         },
       ),

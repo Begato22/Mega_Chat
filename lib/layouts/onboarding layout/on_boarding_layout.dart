@@ -16,12 +16,14 @@ class OnBoardingLayout extends StatelessWidget {
     return BlocConsumer<OnBoardingCubit, OnBoardingStates>(
       listener: ((context, state) {}),
       builder: (context, state) {
+        var cubit = OnBoardingCubit.get(context);
         return Scaffold(
           body: Container(
             child: IntroScreenOnboarding(
               backgroudColor: Colors.white,
-              introductionList: OnBoardingCubit.get(context).list,
+              introductionList: cubit.list,
               onTapSkipButton: () {
+                cubit.skip();
                 navigateAndRemoveTo(context, const LoginScreen());
               },
             ),

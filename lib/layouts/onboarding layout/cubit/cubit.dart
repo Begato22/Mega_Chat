@@ -3,13 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intro_screen_onboarding_flutter/intro_app.dart';
 import 'package:mega_chat/layouts/onboarding%20layout/cubit/states.dart';
+import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 
 class OnBoardingCubit extends Cubit<OnBoardingStates> {
   OnBoardingCubit() : super(OnBoardingInitiState());
 
   static OnBoardingCubit get(context) => BlocProvider.of(context);
-
-  var _titleTextStyle = TextStyle(fontSize: 20);
 
   final List<Introduction> list = [
     Introduction(
@@ -41,4 +40,9 @@ class OnBoardingCubit extends Cubit<OnBoardingStates> {
       subTitleTextStyle: TextStyle(fontSize: 12),
     ),
   ];
+
+  void skip() {
+    CashHelper.setData(key: 'onBoarding', value: true);
+    emit(OnBoardingSkipState());
+  }
 }
