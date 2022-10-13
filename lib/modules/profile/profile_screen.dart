@@ -135,8 +135,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                C
-                ontainer(
+                Container(
                   width: double.infinity,
                   color: Colors.white,
                   padding: const EdgeInsets.all(20),
