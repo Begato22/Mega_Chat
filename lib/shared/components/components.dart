@@ -42,7 +42,7 @@ Widget defultButton({
 }) =>
     SizedBox(
       width: double.infinity,
-      height: 50.0,
+      height: 40.0,
       child: ElevatedButton(
         onPressed: () => isDisabled ? null : onPressed(),
         style: ElevatedButton.styleFrom(

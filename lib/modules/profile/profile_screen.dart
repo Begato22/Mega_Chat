@@ -164,6 +164,7 @@ class ProfileScreen extends StatelessWidget {
                     lable: 'logout',
                   ),
                 ),
+                const SizedBox(height: 40),
               ],
             ),
           ),
