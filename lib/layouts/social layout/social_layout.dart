@@ -1,4 +1,5 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
@@ -52,20 +53,27 @@ class SocialLayout extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Row(
-                  children: const [
-                    CircleAvatar(
+                  children: [
+                    const CircleAvatar(
                       radius: 15,
                       child: Icon(
                         IconBroken.Search,
                         size: 18,
                       ),
                     ),
-                    SizedBox(width: 5),
-                    CircleAvatar(
-                      radius: 15,
-                      child: Icon(
-                        IconBroken.Notification,
-                        size: 18,
+                    const SizedBox(width: 5),
+                    Badge(
+                      position: BadgePosition.topEnd(top: -10, end: -5),
+                      badgeContent: const Text(
+                        "10",
+                        style: TextStyle(fontSize: 10, color: Colors.white),
+                      ),
+                      child: const CircleAvatar(
+                        radius: 15,
+                        child: Icon(
+                          IconBroken.Notification,
+                          size: 18,
+                        ),
                       ),
                     ),
                   ],

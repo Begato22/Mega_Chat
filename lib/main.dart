@@ -22,7 +22,6 @@ Future<void> main() async {
   await CashHelper.initi();
   uId = CashHelper.getData(key: 'id');
   var onBoarding = CashHelper.getData(key: 'onBoarding');
-  print('onBoarding ${onBoarding}');
   Widget widget;
   if (uId != null) {
     widget = const LoaderScreen();

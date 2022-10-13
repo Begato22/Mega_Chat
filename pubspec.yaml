@@ -58,6 +58,7 @@ dependencies:
   progress_indicators: ^1.0.0
   onboarding: ^3.1.0
   intro_screen_onboarding_flutter: ^1.0.0
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test:

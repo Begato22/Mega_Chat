@@ -34,125 +34,164 @@ class ProfileScreen extends StatelessWidget {
               // state == GetUserLoading
               //     ? const Center(child: CircularProgressIndicator())
               //     :
-              Column(
-            children: [
-              SizedBox(
-                height: size.height * 0.37,
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: const BoxDecoration(
-                          color: defaultColor,
-                        ),
-                        child: Image.network(
-                          user.userModel.cover!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        CircleAvatar(
-                          radius: 83,
-                          backgroundColor: defaultColor,
-                          child: CircleAvatar(
-                            backgroundImage: Image.network(
-                              user.userModel.imgUrl!,
-                              fit: BoxFit.cover,
-                            ).image,
-                            radius: 80,
-                            backgroundColor: defaultColor,
+              SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: size.height * 0.37,
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomCenter,
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: const BoxDecoration(
+                            color: defaultColor,
+                          ),
+                          child: Image.network(
+                            user.userModel.cover!,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        Positioned(
-                          right: size.width * 0.05,
-                          child: GestureDetector(
-                            onTap: () async {
-                              await user.pickImage();
-                            },
-                            child: const CircleAvatar(
-                              radius: 15,
-                              child: Icon(
-                                IconBroken.Camera,
-                                size: 18,
+                      ),
+                      Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          CircleAvatar(
+                            radius: 83,
+                            backgroundColor: defaultColor,
+                            child: CircleAvatar(
+                              backgroundImage: Image.network(
+                                user.userModel.imgUrl!,
+                                fit: BoxFit.cover,
+                              ).image,
+                              radius: 80,
+                              backgroundColor: defaultColor,
+                            ),
+                          ),
+                          Positioned(
+                            right: size.width * 0.05,
+                            child: GestureDetector(
+                              onTap: () async {
+                                await user.pickImage();
+                              },
+                              child: const CircleAvatar(
+                                radius: 15,
+                                child: Icon(
+                                  IconBroken.Camera,
+                                  size: 18,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                user.userModel.name!.capitalizeFirstOfEach,
-                style: const TextStyle(
-                    fontSize: 30,
-                    fontFamily: 'JosefinSlab',
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Stack(
-                  alignment: AlignmentDirectional.topEnd,
-                  children: [
-                    Card(
-                      child: Container(
-                        width: double.infinity,
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 20),
-                            buildUserDetailsItem(
-                              IconBroken.Message,
-                              user.userModel.email,
-                            ),
-                            const SizedBox(height: 10),
-                            buildUserDetailsItem(
-                              IconBroken.Call,
-                              user.userModel.phone!,
-                            )
-                          ],
+                const SizedBox(height: 20),
+                Text(
+                  user.userModel.name!.capitalizeFirstOfEach,
+                  style: const TextStyle(
+                      fontSize: 30,
+                      fontFamily: 'JosefinSlab',
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      buildUserRecordItem('Posts', '100'),
+                      Spacer(),
+                      buildUserRecordItem('Photos', '266'),
+                      Spacer(),
+                      buildUserRecordItem('Followers', '10k'),
+                      Spacer(),
+                      buildUserRecordItem('Following', '4'),
+                    ],
+                  ),
+                ),
+                // const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: ButtonStyle(),
+                          onPressed: () {},
+                          child: Text('add photo'),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: const Icon(
-                          IconBroken.Edit,
-                          color: defaultColor,
-                        ),
+                      SizedBox(width: 10),
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: Icon(IconBroken.Edit),
+                      )
+                    ],
+                  ),
+                ),
+                C
+                ontainer(
+                  width: double.infinity,
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      buildUserDetailsItem(
+                        IconBroken.Message,
+                        user.userModel.email,
                       ),
-                    )
-                  ],
+                      const SizedBox(height: 10),
+                      buildUserDetailsItem(
+                        IconBroken.Call,
+                        user.userModel.phone!,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: defultButton(
-                  onPressed: () {
-                    user.signOut(user.userModel.loginMethod);
-                  },
-                  lable: 'logout',
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: defultButton(
+                    onPressed: () {
+                      user.signOut(user.userModel.loginMethod);
+                    },
+                    lable: 'logout',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Column buildUserRecordItem(String recordName, String recordValue) {
+    return Column(
+      children: [
+        Text(
+          recordValue,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
+        ),
+        SizedBox(height: 5),
+        Text(
+          recordName,
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 16,
+          ),
+        ),
+      ],
     );
   }
 
