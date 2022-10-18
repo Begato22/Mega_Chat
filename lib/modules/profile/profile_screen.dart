@@ -106,11 +106,11 @@ class ProfileScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       buildUserRecordItem('Posts', '100'),
-                      Spacer(),
+                      const Spacer(),
                       buildUserRecordItem('Photos', '266'),
-                      Spacer(),
+                      const Spacer(),
                       buildUserRecordItem('Followers', '10k'),
-                      Spacer(),
+                      const Spacer(),
                       buildUserRecordItem('Following', '4'),
                     ],
                   ),
@@ -122,15 +122,15 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          style: ButtonStyle(),
+                          style: const ButtonStyle(),
                           onPressed: () {},
-                          child: Text('add photo'),
+                          child: const Text('add photo'),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       OutlinedButton(
                         onPressed: () {},
-                        child: Icon(IconBroken.Edit),
+                        child: const Icon(IconBroken.Edit),
                       )
                     ],
                   ),
@@ -178,15 +178,15 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           recordValue,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 18,
           ),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(
           recordName,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w300,
             fontSize: 16,
           ),
