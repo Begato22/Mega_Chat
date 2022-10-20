@@ -53,7 +53,7 @@ class LoaderScreen extends StatelessWidget {
         print(
             '@@ this uId in cash helper provided  before checking : ${CashHelper.getData(key: 'id')}');
         if (loginMethod != null && uId != null) {
-          print('loginMthod is not null.');
+          print('loginMethod is not null.');
           if (loginMethod == 'LoginMethod.facebook') {
             print('@@ we will get data from facebook login');
             cubit.getUser(uId, LoginMethod.facebook);
