@@ -7,6 +7,7 @@ import 'package:mega_chat/layouts/social%20layout/social%20cubit/states.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/new%20post/new_post_screen.dart';
+import 'package:mega_chat/modules/notifications/notification.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/styles/colors.dart';
 import 'package:mega_chat/shared/styles/icons_broken.dart';
@@ -62,17 +63,21 @@ class SocialLayout extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    Badge(
-                      position: BadgePosition.topEnd(top: -10, end: -5),
-                      badgeContent: const Text(
-                        "10",
-                        style: TextStyle(fontSize: 10, color: Colors.white),
-                      ),
-                      child: const CircleAvatar(
-                        radius: 15,
-                        child: Icon(
-                          IconBroken.Notification,
-                          size: 18,
+                    InkWell(
+                      onTap: () =>
+                          navigateTo(context, const NotificationScreen()),
+                      child: Badge(
+                        position: BadgePosition.topEnd(top: -10, end: -5),
+                        badgeContent: const Text(
+                          "10",
+                          style: TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                        child: const CircleAvatar(
+                          radius: 15,
+                          child: Icon(
+                            IconBroken.Notification,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ),

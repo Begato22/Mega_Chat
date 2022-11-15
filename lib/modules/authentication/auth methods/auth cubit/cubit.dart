@@ -60,6 +60,7 @@ class AuthCubit extends Cubit<AuthStates> {
       },
     ).catchError(
       (onError) {
+        print(onError.toString());
         emit(CreateUserErrorState(onError.toString()));
       },
     );

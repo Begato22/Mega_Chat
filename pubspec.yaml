@@ -59,6 +59,7 @@ dependencies:
   onboarding: ^3.1.0
   intro_screen_onboarding_flutter: ^1.0.0
   badges: ^2.0.3
+  firebase_messaging: ^13.1.0
   
 
 dev_dependencies:

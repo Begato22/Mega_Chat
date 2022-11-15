@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/layouts/onboarding%20layout/cubit/cubit.dart';
@@ -8,12 +11,18 @@ import 'package:mega_chat/layouts/social%20layout/user%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
+import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/constants.dart';
 import 'package:mega_chat/shared/my_bloc_observer.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 import 'package:mega_chat/shared/styles/themes.dart';
 
 import 'modules/authentication/login/login_screen.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  showToast('Welcome from on Background Message', ToastState.success);
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +41,18 @@ Future<void> main() async {
       widget = const LoginScreen();
     }
   }
+
+  var token = await FirebaseMessaging.instance.getToken();
+  print(token);
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data);
+    showToast('Welcome from onMessage', ToastState.success);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data);
+    showToast('Welcome from on Message Opened App', ToastState.success);
+  });
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   runApp(MyApp(startWidget: widget));
 }
 
