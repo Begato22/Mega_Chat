@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,8 +46,14 @@ class PhoneScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
                     InternationalPhoneNumberInput(
-                      onInputChanged: (PhoneNumber number) =>
-                          cubit.onInputChanged(number),
+                      validator: (number) {
+                        String pattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
+                        RegExp regExp = RegExp(pattern);
+                        regExp.hasMatch(number.toString());
+                      },
+                      onInputChanged: (PhoneNumber number) {
+                        cubit.onInputChanged(number);
+                      },
                       onInputValidated: (bool value) {},
                       selectorConfig: const SelectorConfig(
                         selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
@@ -54,20 +61,48 @@ class PhoneScreen extends StatelessWidget {
                       ignoreBlank: false,
                       autoValidateMode: AutovalidateMode.disabled,
                       selectorTextStyle: const TextStyle(color: Colors.black),
-                      initialValue: PhoneNumber(phoneNumber: '01000000000'),
+                      initialValue: PhoneNumber(
+                        phoneNumber: '01201742990',
+                        dialCode: '+20',
+                        isoCode: 'EG',
+                      ),
                       textFieldController: phoneController,
                       formatInput: false,
-                      keyboardType: const TextInputType.numberWithOptions(
-                          signed: true, decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       inputBorder: const OutlineInputBorder(),
-                      maxLength: 10,
+                      maxLength: 11,
                     ),
                     const SizedBox(height: 15),
                     defultButton(
-                        onPressed: () {
-                          navigateAndRemoveTo(context, const OtpScreen());
-                        },
-                        lable: 'Validate')
+                      onPressed: () {
+                        try {
+                          FocusScope.of(context).unfocus();
+                          FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: cubit.number.phoneNumber,
+                            timeout: const Duration(seconds: 20),
+                            verificationCompleted: (phoneAuthCredential) {
+                              print('@@ verificationCompleted');
+                            },
+                            verificationFailed: (error) {
+                              showToast(error.toString(), ToastState.error);
+                            },
+                            codeSent: (verificationId, forceResendingToken) {
+                              navigateTo(context,
+                                  OtpScreen(verificationId: verificationId));
+                            },
+                            codeAutoRetrievalTimeout: (verificationId) {
+                              print('timeout');
+                              print(verificationId);
+                              cubit.sendVerificationId(verificationId);
+                            },
+                          );
+                        } catch (e) {
+                          print('@@ ${e.toString()}');
+                        }
+                      },
+                      lable: 'Validate',
+                    )
                   ],
                 ),
               ),

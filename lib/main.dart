@@ -10,6 +10,7 @@ import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
 import 'package:mega_chat/layouts/social%20layout/user%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
 import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/modules/authentication/auth%20methods/phone%20cubit/cubit.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/constants.dart';
@@ -74,6 +75,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<OnBoardingCubit>(
           create: (context) => OnBoardingCubit(),
+        ),
+        BlocProvider<PhoneAuthCubit>(
+          create: (context) => PhoneAuthCubit(),
         ),
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(

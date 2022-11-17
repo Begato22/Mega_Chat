@@ -9,16 +9,24 @@ class PhoneAuthCubit extends Cubit<PhoneStates> {
 
   static PhoneAuthCubit get(context) => BlocProvider.of(context);
 
-  PhoneNumber number = PhoneNumber(isoCode: 'EG');
+  late PhoneNumber number =
+      PhoneNumber(phoneNumber: '+201201742990', dialCode: '+20', isoCode: 'EG');
+  String verificationCode = '';
+  String? verificationIdResent ;
 
-  void getPhoneNumber(String phoneNumber) async {
-    PhoneNumber newNumber =
-        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
-
+  void onInputChanged(PhoneNumber newNumber) {
     number = newNumber;
+    print('number ${number}');
+    // emit(NumberChangedState());
   }
 
-  void onInputChanged(PhoneNumber number) {
-    print(number.phoneNumber);
+  void setVerificationCode(String newCode) {
+    verificationCode = newCode;
+    emit(CodeChangedState());
+  }
+
+  void sendVerificationId(String vId) {
+    verificationIdResent = vId;
+    emit(VerificationIdChangedState());
   }
 }

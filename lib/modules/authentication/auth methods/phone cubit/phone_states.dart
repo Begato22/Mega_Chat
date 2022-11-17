@@ -26,3 +26,9 @@ class SignOutErrorState extends PhoneStates {
 }
 
 class SignInChangeVisabilityState extends PhoneStates {}
+
+class NumberChangedState extends PhoneStates {}
+
+class CodeChangedState extends PhoneStates {}
+
+class VerificationIdChangedState extends PhoneStates {}
