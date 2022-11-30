@@ -2,13 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 
-import '../../../shared/components/components.dart';
-import '../../../shared/components/constants.dart';
-
+import '../../shared/components/components.dart';
+import '../../shared/components/constants.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -25,7 +24,6 @@ class RegisterScreen extends StatelessWidget {
         if (state is SignUpLodingState) {
           navigateAndRemoveTo(context, const LoaderScreen());
         }
-
       },
       builder: (context, state) {
         makeStatusBarTransparent();
@@ -57,7 +55,7 @@ class RegisterScreen extends StatelessWidget {
                             .copyWith(color: Colors.grey),
                       ),
                       const SizedBox(height: 40),
-                      defultTextField(
+                      defaultTextField(
                         controller: nameController,
                         prefix: Icons.person,
                         label: "User Name",
@@ -71,7 +69,7 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 15),
-                      defultTextField(
+                      defaultTextField(
                         controller: emailController,
                         prefix: Icons.email_outlined,
                         label: "Email Address",
@@ -85,7 +83,7 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 15),
-                      defultTextField(
+                      defaultTextField(
                         controller: passwordController,
                         prefix: Icons.lock_outline,
                         label: "Password",
@@ -102,7 +100,7 @@ class RegisterScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 15),
-                      defultTextField(
+                      defaultTextField(
                         controller: phoneController,
                         prefix: Icons.phone,
                         label: "Phone",

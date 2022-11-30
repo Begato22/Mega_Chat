@@ -2,10 +2,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
-import 'package:mega_chat/layouts/social%20layout/social%20cubit/states.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/blocs/social%20cubit/cubit.dart';
+import 'package:mega_chat/blocs/social%20cubit/states.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
 import 'package:mega_chat/modules/new%20post/new_post_screen.dart';
 import 'package:mega_chat/modules/notifications/notification.dart';
 import 'package:mega_chat/shared/components/components.dart';

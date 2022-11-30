@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mega_chat/shared/components/components.dart';
 
-import '../../modules/authentication/login/login_screen.dart';
+import '../../modules/login/login_screen.dart';
 import '../networks/local/cach_helper.dart';
 
 void makeStatusBarTransparent() {

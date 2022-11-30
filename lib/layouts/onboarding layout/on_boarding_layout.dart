@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intro_screen_onboarding_flutter/intro_app.dart';
-import 'package:mega_chat/layouts/onboarding%20layout/cubit/cubit.dart';
-import 'package:mega_chat/layouts/onboarding%20layout/cubit/states.dart';
-import 'package:mega_chat/modules/authentication/login/login_screen.dart';
+import 'package:mega_chat/blocs/onboarding_cubit/cubit.dart';
+import 'package:mega_chat/blocs/onboarding_cubit/states.dart';
+import 'package:mega_chat/modules/login/login_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 
 class OnBoardingLayout extends StatelessWidget {

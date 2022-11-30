@@ -61,6 +61,7 @@ dependencies:
   badges: ^2.0.3
   firebase_messaging: ^13.1.0
   flutter_countdown_timer: ^4.1.0
+  firebase_storage: ^10.3.11
   
 
 dev_dependencies:

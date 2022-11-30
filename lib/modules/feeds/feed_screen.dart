@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
 import 'package:mega_chat/shared/styles/icons_broken.dart';
 
 class FeedsScreen extends StatelessWidget {

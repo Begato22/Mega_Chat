@@ -4,13 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/layouts/onboarding%20layout/cubit/cubit.dart';
+import 'package:mega_chat/blocs/onboarding_cubit/cubit.dart';
 import 'package:mega_chat/layouts/onboarding%20layout/on_boarding_layout.dart';
-import 'package:mega_chat/layouts/social%20layout/social%20cubit/cubit.dart';
-import 'package:mega_chat/layouts/social%20layout/user%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/phone%20cubit/cubit.dart';
+import 'package:mega_chat/blocs/social%20cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
+
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/constants.dart';
@@ -18,7 +17,7 @@ import 'package:mega_chat/shared/my_bloc_observer.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 import 'package:mega_chat/shared/styles/themes.dart';
 
-import 'modules/authentication/login/login_screen.dart';
+import 'modules/login/login_screen.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -67,17 +66,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit()..createFakeUser(),
         ),
-        BlocProvider<UserCubit>(
-          create: (context) => UserCubit(),
-        ),
         BlocProvider<SocialCubit>(
           create: (context) => SocialCubit(),
         ),
         BlocProvider<OnBoardingCubit>(
           create: (context) => OnBoardingCubit(),
-        ),
-        BlocProvider<PhoneAuthCubit>(
-          create: (context) => PhoneAuthCubit(),
         ),
       ],
       child: BlocConsumer<AuthCubit, AuthStates>(

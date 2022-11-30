@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
+import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import '../../../../models/user model/user_model.dart';
-import '../../../../shared/components/constants.dart';
+import '../../models/user model/user_model.dart';
+import '../../shared/components/constants.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(AuthInitialState());
@@ -81,6 +86,71 @@ class AuthCubit extends Cubit<AuthStates> {
     ).catchError((onError) {
       emit(GetUserErrorState());
     });
+  }
+
+  // **************************** phone verification ****************************
+  PhoneNumber number = PhoneNumber(dialCode: '+20', isoCode: 'EG');
+  String verificationCode = '';
+  String? verificationIdResent;
+
+  void setVerificationCode(String newCode) {
+    verificationCode = newCode;
+    emit(CodeChangedState());
+  }
+
+  void onInputChanged(PhoneNumber newNumber) {
+    number = newNumber;
+    print('number $number');
+    // emit(NumberChangedState());
+  }
+
+  void sendVerificationId(String vId) {
+    verificationIdResent = vId;
+    emit(VerificationIdChangedState());
+  }
+
+  Future<void> signInWithPhoneNumber(String verificationId) async {
+    emit(SignInLodingState());
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: verificationCode,
+    );
+    FirebaseAuth.instance.signInWithCredential(credential).then(
+      (value) async {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(value.user!.uid)
+            .set({
+          'name': 'MegaChat Usre',
+          'email': 'demo.email@mega.com',
+          'uid': value.user!.uid,
+          'cover':
+              'https://timelinecovers.pro/facebook-cover/download/oh-wow-sarcastic-facebook-cover.jpg',
+          'imageUrl':
+              'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1664890049~exp=1664890649~hmac=d0051e6c4e9f238987ba4326c6e13483b0126edd42b2df72dc6279219fbf8794',
+          'phone': number.phoneNumber ?? '01 **** ** ***',
+        }).then(
+          (value) {
+            emit(CreateUserSuccessState());
+          },
+        ).catchError(
+          (onError) {
+            print(onError.toString());
+            emit(CreateUserErrorState(onError.toString()));
+          },
+        );
+        getUser(value.user!.uid, LoginMethod.phoneNumber);
+        if (FirebaseAuth.instance.currentUser != null) {
+          emit(SignInSuccessState());
+          verificationCode = '';
+        }
+      },
+    ).catchError(
+      (err) {
+        print(err.toString());
+        emit(SignInErrorState(err.toString()));
+      },
+    );
   }
 
   Future<void> signInWithEmailAndPassword({
@@ -219,7 +289,105 @@ class AuthCubit extends Cubit<AuthStates> {
     }
   }
 
-  Future pickImage() async {
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+  XFile? pickedImage;
+  File? profileImage;
+  File? coverImage;
+  var imagePicker = ImagePicker();
+  Future<void> pickProfileImage() async {
+    pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      profileImage = File(pickedImage!.path);
+      emit(ProfilePicPickedSuccessState());
+    }
+  }
+
+  Future<void> pickCoverImage() async {
+    pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      coverImage = File(pickedImage!.path);
+      emit(CoverPicPickedSuccessState());
+    }
+  }
+
+  String profileUrlImage = '';
+
+  void uploadProfileImage() {
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('user/${Uri.file(pickedImage!.path).pathSegments.last}')
+        .putFile(profileImage!)
+        .then(
+      (value) {
+        value.ref.getDownloadURL().then(
+          (imageUrl) {
+            print(imageUrl);
+            profileUrlImage = imageUrl;
+            emit(ProfileUploadSuccessState());
+          },
+        ).catchError((onError) {
+          emit(ProfileUploadErrorState());
+        });
+      },
+    ).catchError((onError) {
+      emit(ProfileUploadErrorState());
+    });
+  }
+
+  String coverUrlImage = '';
+
+  void uploadCoverImage() {
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('covers/${Uri.file(pickedImage!.path).pathSegments.last}')
+        .putFile(coverImage!)
+        .then(
+      (value) {
+        value.ref.getDownloadURL().then(
+          (imageUrl) {
+            print(imageUrl);
+            coverUrlImage = imageUrl;
+            emit(CoverUploadSuccessState());
+          },
+        ).catchError((onError) {
+          emit(CoverUploadErrorState());
+        });
+      },
+    ).catchError((onError) {
+      emit(CoverUploadErrorState());
+    });
+  }
+
+  void updateUserData(String name, String phone) {
+    if (profileImage != null) {
+      uploadProfileImage();
+      userModel.imgUrl = profileUrlImage;
+    }
+    if (coverImage != null) {
+      uploadCoverImage();
+      userModel.cover = coverUrlImage;
+    }
+    print('######### $name $phone');
+
+    UserModel updatedData = UserModel(
+      userModel.uId,
+      name.isEmpty ? userModel.name : name,
+      userModel.email,
+      profileUrlImage.isEmpty ? userModel.imgUrl : profileUrlImage,
+      coverUrlImage.isEmpty ? userModel.cover : coverUrlImage,
+      phone.isEmpty ? userModel.phone : phone,
+    );
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uId)
+        .update(updatedData.toMap())
+        .then((value) {
+      getUser(userModel.uId, userModel.loginMethod);
+      showToast('Your Data was Updated', ToastState.success);
+      emit(UploadSuccessState());
+    }).catchError((onError) {
+      showToast('Error', ToastState.error);
+      emit(UploadErrorState());
+    });
   }
 }

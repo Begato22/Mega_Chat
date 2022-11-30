@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
-import 'package:mega_chat/modules/authentication/login/login_screen.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
+import 'package:mega_chat/modules/edit%20profile/edit_profile_screen.dart';
+import 'package:mega_chat/modules/login/login_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/extensions.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
@@ -56,44 +57,24 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Stack(
-                        alignment: AlignmentDirectional.bottomEnd,
-                        children: [
-                          CircleAvatar(
-                            radius: 83,
-                            backgroundColor: defaultColor,
-                            child: CircleAvatar(
-                              backgroundImage: Image.network(
-                                user.userModel.imgUrl!,
-                                fit: BoxFit.cover,
-                              ).image,
-                              radius: 80,
-                              backgroundColor: defaultColor,
-                            ),
-                          ),
-                          Positioned(
-                            right: size.width * 0.05,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await user.pickImage();
-                              },
-                              child: const CircleAvatar(
-                                radius: 15,
-                                child: Icon(
-                                  IconBroken.Camera,
-                                  size: 18,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                      CircleAvatar(
+                        radius: 83,
+                        backgroundColor: defaultColor,
+                        child: CircleAvatar(
+                          backgroundImage: Image.network(
+                            user.userModel.imgUrl!,
+                            fit: BoxFit.cover,
+                          ).image,
+                          radius: 80,
+                          backgroundColor: defaultColor,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  user.userModel.name!.capitalizeFirstOfEach,
+                  user.userModel.name.toString(),
                   style: const TextStyle(
                       fontSize: 30,
                       fontFamily: 'JosefinSlab',
@@ -129,7 +110,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          navigateTo(context, EditProfileScreen());
+                        },
                         child: const Icon(IconBroken.Edit),
                       )
                     ],
@@ -173,6 +156,7 @@ class ProfileScreen extends StatelessWidget {
       },
     );
   }
+
   //I LOVE YOU
   Column buildUserRecordItem(String recordName, String recordValue) {
     return Column(

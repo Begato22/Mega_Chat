@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
 import 'package:mega_chat/modules/loader/loader_screen.dart';
 
-import '../../../shared/components/components.dart';
-import '../../../shared/components/constants.dart';
+import '../../shared/components/components.dart';
+import '../../shared/components/constants.dart';
 import '../register/register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -107,7 +107,7 @@ class LoginScreen extends StatelessWidget {
                             .copyWith(color: Colors.grey),
                       ),
                       const SizedBox(height: 40),
-                      defultTextField(
+                      defaultTextField(
                         controller: emailController,
                         prefix: Icons.email_outlined,
                         label: "Email Address",
@@ -121,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(height: 15),
-                      defultTextField(
+                      defaultTextField(
                         controller: passwordController,
                         prefix: Icons.lock_outline,
                         label: "Password",

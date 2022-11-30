@@ -54,4 +54,5 @@ enum LoginMethod {
   normal,
   facebook,
   google,
+  phoneNumber,
 }

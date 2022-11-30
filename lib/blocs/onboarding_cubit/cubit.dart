@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intro_screen_onboarding_flutter/intro_app.dart';
-import 'package:mega_chat/layouts/onboarding%20layout/cubit/states.dart';
+import 'package:mega_chat/blocs/onboarding_cubit/states.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';
 
 class OnBoardingCubit extends Cubit<OnBoardingStates> {

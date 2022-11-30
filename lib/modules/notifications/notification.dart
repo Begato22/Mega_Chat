@@ -13,7 +13,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     _fcm.getToken().then((token) {
-      print('our token is: $token');
+      debugPrint('our token is: $token');
     });
     super.initState();
   }

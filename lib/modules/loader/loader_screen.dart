@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mega_chat/models/user%20model/user_model.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
-import 'package:mega_chat/modules/authentication/login/login_screen.dart';
-import 'package:mega_chat/modules/authentication/register/register_screen.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
+import 'package:mega_chat/modules/login/login_screen.dart';
+import 'package:mega_chat/modules/register/register_screen.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/components/constants.dart';
 import 'package:mega_chat/shared/networks/local/cach_helper.dart';

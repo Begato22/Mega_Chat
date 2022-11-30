@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mega_chat/models/user%20model/user_model.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/cubit.dart';
-import 'package:mega_chat/modules/authentication/auth%20methods/auth%20cubit/states.dart';
+import 'package:mega_chat/blocs/auth_cubit/cubit.dart';
+import 'package:mega_chat/blocs/auth_cubit/states.dart';
 
-import '../../modules/authentication/opt/phone_screen.dart';
+import '../../modules/opt/phone_screen.dart';
 import '../styles/colors.dart';
 
-Widget defultTextField({
+Widget defaultTextField({
   required TextEditingController controller,
   required TextInputType keyboardType,
   required IconData prefix,
@@ -27,7 +27,7 @@ Widget defultTextField({
           child: Icon(suffix),
           onTap: () => suffixFunc!(),
         ),
-        label: Text(label),
+        hintText: label,
         border: const OutlineInputBorder(),
       ),
       obscureText: obscureText,
@@ -177,6 +177,18 @@ Widget buildMediaSigninAcc(BuildContext context) {
         ],
       );
     },
+  );
+}
+
+AppBar defaultAppBar(String title, Widget leading, Widget action) {
+  return AppBar(
+    titleSpacing: 5.0,
+    leading: leading,
+    title: Text(title),
+    actions: [
+      action,
+      const SizedBox(width: 15),
+    ],
   );
 }
 
