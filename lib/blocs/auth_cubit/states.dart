@@ -78,3 +78,5 @@ class CoverUploadErrorState extends AuthStates {}
 class UploadSuccessState extends AuthStates {}
 
 class UploadErrorState extends AuthStates {}
+
+class UploadLoadingState extends AuthStates {}

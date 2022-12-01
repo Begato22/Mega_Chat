@@ -5,6 +5,7 @@ import 'package:mega_chat/blocs/auth_cubit/states.dart';
 import 'package:mega_chat/shared/components/components.dart';
 import 'package:mega_chat/shared/styles/colors.dart';
 import 'package:mega_chat/shared/styles/icons_broken.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({super.key});
@@ -25,29 +26,61 @@ class EditProfileScreen extends StatelessWidget {
         var user = AuthCubit.get(context);
         var size = MediaQuery.of(context).size;
 
+        var lastName = '';
+        var nameAsList = user.userModel.name!.split(" ");
+        for (var i = 1; i < nameAsList.length; i++) {
+          lastName = '$lastName ${nameAsList[i]}'.trim();
+        }
+
         return Scaffold(
           appBar: defaultAppBar(
             'Edit Profile Screen',
             IconButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  Navigator.of(context).pop();
-                  user.coverImage = null;
-                  user.profileImage = null;
-                }
-              },
-              icon: const Icon(IconBroken.Arrow___Left_2),
+              onPressed: user.isUpdate
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.of(context).pop();
+                        user.coverImage = null;
+                        user.profileImage = null;
+                      }
+                    },
+              icon: Icon(
+                IconBroken.Arrow___Left_2,
+                color:
+                    user.isUpdate ? Colors.grey.withOpacity(0.5) : Colors.white,
+              ),
             ),
-            defultTextButton(
-              onPressed: () {
-                user.updateUserData(
-                  '${fisrtNameController.text} ${lastNameController.text}',
-                  phoneController.text,
-                );
-              },
-              lable: 'update',
-              lableColor: Colors.white,
-            ),
+            !user.isUpdate
+                ? defultTextButton(
+                    onPressed: () {
+                      if (fisrtNameController.text.isEmpty &&
+                          lastNameController.text.isEmpty &&
+                          phoneController.text.isEmpty &&
+                          user.coverImage == null &&
+                          user.profileImage == null) {
+                        showToast('No Data was updated', ToastState.warning);
+                      } else {
+                        user.updateUserData(
+                          '${fisrtNameController.text.isEmpty ? nameAsList[0] : fisrtNameController.text} ${lastNameController.text.isEmpty ? lastName : lastNameController.text}',
+                          '${phoneController.text.isEmpty ? user.userModel.phone : phoneController.text}',
+                        );
+                      }
+                    },
+                    lable: 'update',
+                    lableColor: Colors.white,
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(22),
+                    child: SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
           ),
           body:
               // state == GetUserLoading
@@ -146,7 +179,7 @@ class EditProfileScreen extends StatelessWidget {
                           validator: (val) {
                             print('You must enter valid value');
                           },
-                          label: user.userModel.name!.split(' ')[0],
+                          label: nameAsList[0],
                         ),
                         const SizedBox(height: 10),
                         defaultTextField(
@@ -156,7 +189,7 @@ class EditProfileScreen extends StatelessWidget {
                           validator: (val) {
                             print('You must enter valid value');
                           },
-                          label: user.userModel.name!.split(' ')[1],
+                          label: lastName.trim(),
                         ),
                         const SizedBox(height: 10),
                         defaultTextField(

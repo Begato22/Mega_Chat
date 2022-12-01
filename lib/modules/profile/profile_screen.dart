@@ -74,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  user.userModel.name.toString(),
+                  user.userModel.name!.capitalizeFirstOfEach,
                   style: const TextStyle(
                       fontSize: 30,
                       fontFamily: 'JosefinSlab',
